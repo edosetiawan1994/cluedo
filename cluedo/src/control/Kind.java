@@ -1,7 +1,13 @@
 package control;
 
+/**
+ * This enumeration data type enumerates all possible kinds of cards. In
+ * standard cluedo these are suspects, rooms and weapons.
+ * 
+ * @see control.Card
+ */
 public enum Kind {
-	person,
-	room,
-	weapon,
+	PERSON,
+	ROOM,
+	WEAPON
 }
