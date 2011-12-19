@@ -1,7 +1,6 @@
 package control;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,7 +17,7 @@ public abstract class Player {
 	
 	private String name;
 	private int id;
-	protected List<Card> handCards;
+	protected Set<Card> handCards;
 	protected Game game;
 	
 	/**
@@ -32,7 +31,7 @@ public abstract class Player {
 		if (game == null || name == null) {
 			throw new NullPointerException();
 		}
-		this.handCards = new ArrayList<Card>();
+		this.handCards = new HashSet<Card>();
 		this.game = game;
 		this.name = name;
 		this.id = id;
@@ -46,7 +45,7 @@ public abstract class Player {
 	 * @see control.Card
 	 * @throws NullPointerException
 	 */
-	public void setHandCards(List<Card> handCards) 
+	public void beginGame(Set<Card> handCards) 
 			throws NullPointerException {
 		if (handCards == null) {
 			throw new NullPointerException();
@@ -56,7 +55,7 @@ public abstract class Player {
 	
 	/**
 	 * Get the number of hand cards (equal to the cardinality of the
-	 * argument in the last call of setHandCards(), 0 default)
+	 * argument in the last call of beginGame(), 0 default)
 	 * 
 	 * @see #setHandCards(List)
 	 * @return size of this.handCards

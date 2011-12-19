@@ -1,5 +1,7 @@
 package control.ai;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import control.Card;
@@ -16,6 +18,13 @@ import control.Suggestion;
  */
 public class AIPlayer extends Player {
 
+	/* (non-javadoc)
+	 * Note: assumptions may not correspond to Game.players in terms of
+	 * ordering. The first element in assumptions represents the left neighbour
+	 * of the AIPlayer 
+	 */
+	private List<PlayerAssumption> assumptions;
+	
 	/**
 	 * Sole constructor. Calls the super class constructor and initialize
 	 * class intern data structures.
@@ -24,7 +33,28 @@ public class AIPlayer extends Player {
 	public AIPlayer(Game game, String name, int id)
 			throws NullPointerException {
 		super(game, name, id);
-		// TODO Auto-generated constructor stub
+		assumptions = new LinkedList<PlayerAssumption>();
+	}
+
+	/* (non-Javadoc)
+	 * @see control.Player#beginGame(java.util.Set)
+	 */
+	@Override
+	public void beginGame(Set<Card> handCards) throws NullPointerException {
+		super.beginGame(handCards);
+		// Generate assumptions, starting with left neighbor
+		assumptions.clear();
+		List<Player> players = this.game.getPlayers();
+		boolean thisPlayerPassed = false; 
+		final int numPlayer = players.size();
+		for (int i = 0, j = 1; j < numPlayer; i = (i + 1) % numPlayer) {
+			if (thisPlayerPassed) {
+				assumptions.add(new PlayerAssumption(players.get(i)));
+				j++;
+			} else if (this.equals(players.get(i))) {
+				thisPlayerPassed = true;
+			}
+		}
 	}
 
 	/**
