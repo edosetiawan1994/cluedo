@@ -6,7 +6,7 @@ public class AI extends Player{
 
 	@Override
 	public Suggestion play() {
-		// TODO Auto-generated method stub
+		// TODO Auto-gennerated method stub
 		return null;
 	}
 
