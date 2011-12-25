@@ -2,6 +2,7 @@ package control.ai;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 
 import control.Card;
@@ -20,10 +21,15 @@ public class AIPlayer extends Player {
 
 	/* (non-javadoc)
 	 * Note: assumptions may not correspond to Game.players in terms of
-	 * ordering. The first element in assumptions represents the left neighbour
+	 * ordering. The first element in assumptions represents the left neighbor
 	 * of the AIPlayer 
 	 */
 	private List<PlayerAssumption> assumptions;
+	
+	/* (non-javadoc)
+	 * Stores the current search space of possible solutions.
+	 */
+	private SearchSpace searchSpace;
 	
 	/**
 	 * Sole constructor. Calls the super class constructor and initialize
@@ -34,6 +40,7 @@ public class AIPlayer extends Player {
 			throws NullPointerException {
 		super(game, name, id);
 		assumptions = new LinkedList<PlayerAssumption>();
+		searchSpace = new SearchSpace();
 	}
 
 	/* (non-Javadoc)
@@ -54,6 +61,22 @@ public class AIPlayer extends Player {
 			} else if (this.equals(players.get(i))) {
 				thisPlayerPassed = true;
 			}
+		}
+		// Player assumptions are observed by searchSpace and each other
+		Observable o = new Observable();
+		o.addObserver(searchSpace);
+		for (PlayerAssumption assumption : assumptions) {
+			assumption.addObserver(searchSpace);
+			o.addObserver(assumption);
+			for (PlayerAssumption otherAssumption : assumptions) {
+				if (otherAssumption != assumption) {
+					assumption.addObserver(otherAssumption);
+				}
+			}
+		}
+		// Inform all about own hand cards
+		for (Card card : handCards) {
+			o.notifyObservers(card);
 		}
 	}
 
