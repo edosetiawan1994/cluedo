@@ -95,6 +95,8 @@ public class PlayerAssumption extends Observable implements Observer {
 		}
 	}
 	
+	
+	
 	/**
 	 * This method is called whenever a certain card is added somewhere else.
 	 * We can then exclude this card from our possible cards pool.

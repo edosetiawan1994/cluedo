@@ -9,5 +9,7 @@ package control;
 public enum Kind {
 	PERSON,
 	ROOM,
-	WEAPON
+	WEAPON;
+	
+	public static final int size = 3;
 }
