@@ -110,7 +110,7 @@ public abstract class Player {
 	 * @param questionair asking player
 	 * @param answerer answering player
 	 * @param couldNotAnswer set of players which could not answer
-	 * @throws NullPointerException if suggestion is null
+	 * @throws NullPointerException if suggestion or couldNotAnswer are null
 	 */
 	public abstract void observeMove(Suggestion suggestion, Player questionair,
 			Player answerer, Set<Player> couldNotAnswer)

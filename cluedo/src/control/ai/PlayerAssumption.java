@@ -1,6 +1,8 @@
 package control.ai;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -54,9 +56,9 @@ public class PlayerAssumption extends Observable implements Observer {
 	
 	/**
 	 * Remove a card from the set of possible cards. If this set does not
-	 * contain this card, do nothing. If after adding this card we have as 
-	 * much possible cards as free player hand card slots, remove all possible
-	 * hand cards and add the remaining to cetrainHandCards.
+	 * contain this card, do nothing. If after adding this card, we have as 
+	 * much possible cards as free player's hand card slots, add them to
+	 * certainHandCards and remove them from possible hand cards.
 	 * 
 	 * @param card card to remove
 	 * @throws NullPointerException if card is null
@@ -77,6 +79,21 @@ public class PlayerAssumption extends Observable implements Observer {
 				this.notifyObservers(certainCard);
 			}
 		}
+		
+		kb.addNewFact(new Literal<Card>(card, false));
+		/* TODO
+		List<Literal<Card>> facts = kb.getNewFacts();
+		while (!facts.isEmpty()) {
+			List<Literal<Card>> addFacts = new ArrayList<Literal<Card>>();
+			for (Literal<Card> l : facts) {
+				if (l.getSign()) {
+					// we have found new certain hand card
+					addCertainHandCard(l.getValue());
+					addFacts.addAll(kb.getNewFacts());
+				}
+			}
+			facts.addAll(addFacts);
+		}*/
 	}
 	
 	/**
@@ -95,12 +112,16 @@ public class PlayerAssumption extends Observable implements Observer {
 			return; // Already added / not possible
 		}
 		this.certainHandCards.add(card);
-		this.removePossibleCard(card);
+		//this.removePossibleCard(card); <- not necessary
+		this.possibleHandCards.remove(card);
 		this.setChanged();
 		this.notifyObservers(card);
 		if (this.certainHandCards.size() == this.player.countHandCards()) {
 			this.possibleHandCards.clear();
 		}
+		
+		// remove all clauses with card = true
+		kb.addNewFact(card, true);
 	}
 	
 	/**
@@ -124,7 +145,7 @@ public class PlayerAssumption extends Observable implements Observer {
 
 	/**
 	 * Returns if this player is fully explored, meaning that we know each of
-	 * his/her hand card.
+	 * his/her hand cards.
 	 * 
 	 * @return TRUE if we know all hand cards, FALSE otherwise
 	 */

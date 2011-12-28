@@ -151,8 +151,28 @@ public class AIPlayer extends Player {
 			throws NullPointerException {
 		if (suggestion == null || couldNotAnswer == null) {
 			throw new NullPointerException();
+		} else {
+			couldNotAnswer(suggestion, couldNotAnswer);
+			PlayerAssumption pa = getPlayerAssumption(answerer);
+			pa.addCertainHandCard(card);
 		}
-		// TODO Auto-generated method stub
+	}
+	
+	/**
+	 * Updates gained information from suggestion to all players who could not
+	 * answer it (do not have any of the cards in suggestion).
+	 * 
+	 * @param suggestion	Asked suggestion
+	 * @param couldNotAnswer	Set of players who could not answer
+	 */
+	private void couldNotAnswer(Suggestion suggestion, 
+			Set<Player> couldNotAnswer) {
+		for (Player p : couldNotAnswer) {
+			PlayerAssumption pa = getPlayerAssumption(p);
+			pa.removePossibleCard(suggestion.getPerson());
+			pa.removePossibleCard(suggestion.getRoom());
+			pa.removePossibleCard(suggestion.getWeapon());
+		}
 	}
 
 	/**
@@ -169,7 +189,45 @@ public class AIPlayer extends Player {
 			throws NullPointerException {
 		if (suggestion == null || couldNotAnswer == null) {
 			throw new NullPointerException();
+		} else {
+			couldNotAnswer(suggestion, couldNotAnswer);
+			PlayerAssumption pa = getPlayerAssumption(answerer);
+			boolean addClause = true;
+			Card person = suggestion.getPerson();
+			Card room = suggestion.getRoom();
+			Card weapon = suggestion.getWeapon();
+			
+			for (Card c : pa.getCertainHandCards()) {
+				if (c.equals(person) || c.equals(room) || c.equals(weapon)) {
+					addClause = false;
+				}
+			}
+			
+			if (addClause) {
+				Clause<Card> clause = new Clause<Card>();
+				clause.addLiteral(person, true);
+				clause.addLiteral(room, true);
+				clause.addLiteral(weapon, true);
+				pa.getKb().addClause(clause);
+			}
 		}
-		// TODO Auto-generated method stub
+	}
+	
+	/**
+	 * Returns PlayerAssumption from given player.
+	 * 
+	 * @param player	Player whose PlayerAssumption we search for
+	 * @return	PlayerAssumption from requested player
+	 * @throws IllegalArgumentException	if requested player's PlayerAssumption
+	 * 									does not exist
+	 */
+	public PlayerAssumption getPlayerAssumption(Player player) 
+			throws IllegalArgumentException {
+		for (PlayerAssumption pa : assumptions) {
+			if (pa.getPlayer().equals(player)) {
+				return pa;
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 }
