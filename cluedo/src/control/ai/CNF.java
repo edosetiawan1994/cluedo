@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import aima.core.logic.propositional.algorithms.KnowledgeBase;
 
-
-public class CNF<T> extends KnowledgeBase {
+public class CNF<T> {
 	private List<Clause<T>> clauses;
 	private TruthValues value;
 
@@ -29,6 +27,9 @@ public class CNF<T> extends KnowledgeBase {
 		List<Literal<T>> knownLiterals = new ArrayList<Literal<T>>();
 		for (Clause<T> c : clauses) {
 			boolean valid = true;
+			if (c.isEmpty()) {
+				value = TruthValues.UNVALID;
+			}
 			for (Literal<T> l : c.getLiterals()) {
 				if (l.getValue().equals(literalValue)) {
 					if (sign == l.getSign()) {
@@ -60,8 +61,9 @@ public class CNF<T> extends KnowledgeBase {
 		}
 		if (clauses.size() == 0) {
 			value = TruthValues.VALID;
-		} else
+		} else {
 			value = TruthValues.UNKNOWN;
+		}
 		
 	}
 	

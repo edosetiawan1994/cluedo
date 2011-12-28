@@ -12,13 +12,16 @@ public class TestCNF {
 		CNF<String> cnf = fillClauses2();
 		System.out.println(cnf.toString());
 		
+		cnf.updateCNF("B11", false);
+		System.out.println(cnf.toString());
+		
 		/*System.out.println("updated: with A = true");
 		cnf.updateCNF("A", true);
 		System.out.println(cnf.toString());
 		System.out.println("updated: with F = true");
 		cnf.updateCNF("F", true);*/
 		
-		System.out.println("Resolution result: " + cnf.resolution());
+		//System.out.println("Resolution result: " + cnf.resolution());
 		System.out.println(cnf.toString());
 	}
 	

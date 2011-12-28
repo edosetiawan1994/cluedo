@@ -3,14 +3,11 @@ package control.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import aima.core.logic.propositional.parsing.PLVisitor;
-import aima.core.logic.propositional.parsing.ast.ComplexSentence;
-
 /**
  * 
  *
  */
-public class Clause<T> extends ComplexSentence {
+public class Clause<T> {
 	private List<Literal<T>> literals;
 	
 	/**
@@ -83,18 +80,15 @@ public class Clause<T> extends ComplexSentence {
 	 */
 	@Override
 	public String toString() {
+		if (this.isEmpty()) {
+			return "()";
+		}
 		String s = " (" + literals.get(0).toString();
 		for (int i = 1; i < literals.size(); i++) {
 			s += " v " + literals.get(i).toString();
 		}
 		s += ") ";
 		return s;
-	}
-
-	@Override
-	public Object accept(PLVisitor plv, Object arg) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 		
 }
