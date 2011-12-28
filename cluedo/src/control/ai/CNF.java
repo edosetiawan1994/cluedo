@@ -1,10 +1,13 @@
 package control.ai;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import aima.core.logic.propositional.algorithms.KnowledgeBase;
 
-public class CNF<T> {
+
+public class CNF<T> extends KnowledgeBase {
 	private List<Clause<T>> clauses;
 	private TruthValues value;
 
@@ -63,8 +66,123 @@ public class CNF<T> {
 	}
 	
 	public TruthValues resolution() {
+		List<Clause<T>> resolvents = new ArrayList<Clause<T>>();
+		List<Clause<T>> removeClauses = new ArrayList<Clause<T>>();
+		List<Clause<T>> newList = clauses;
+		//TODO copy clauses
+		int counter = 0;
+		while (true) {
+			if (counter > 20) {
+				// prevents infinite loop
+				return TruthValues.UNKNOWN;
+			}
+			List<List<Clause<T>>> pairs = generatePairsOfClauses(newList);
+			for (int i = 0; i < pairs.size(); i++) {
+				List<Clause<T>> pair = pairs.get(i);
+				Clause<T> c1 = pair.get(0);
+				Clause<T> c2 = pair.get(1);
+				Clause<T> resolved = resolveClauses(c1, c2);
+				if (resolved != null) { 
+					// clauses were resolved! new clause has been generated
+					if (resolved.isEmpty()) {
+						return TruthValues.UNVALID;
+					}
+					resolvents.add(resolved);
+					removeClauses.add(c1);
+					removeClauses.add(c2);
+				}
+			}
+			newList.removeAll(removeClauses);
+			newList.addAll(resolvents);
+			resolvents.clear();
+			removeClauses.clear();
+			
+			counter++;
+		}
+	}
+	
+	/**
+	 * Returns all literals in the CNF (contained in at least one clause)
+	 * with their quantity.
+	 * @return	HashMap with Literals and their quantities.
+	 */
+	public HashMap<Literal<T>, Integer> getAllLiterals() {
+		HashMap<Literal<T>, Integer> hm = new HashMap<Literal<T>, Integer>();
+		for (Clause<T> c : clauses) {
+			for (Literal<T> l : c.getLiterals()) {
+				if (hm.containsKey(l)) {
+					Integer oldValue = hm.get(l);
+					hm.put(l, oldValue + 1);
+				} else {
+					hm.put(l, 1);
+				}
+			}
+		}
+		return hm;
+	}
+	
+	/**
+	 * Generates all possible pairs of clauses from given clause list.
+	 * @param clauseList list of clauses
+	 * @return	list of pairs (lists) of clauses
+	 */
+	private List<List<Clause<T>>> generatePairsOfClauses(List<Clause<T>> clauseList) {
+		List<List<Clause<T>>> listOfPairs = new ArrayList<List<Clause<T>>>();
+		for (Clause<T> c1 : clauseList) {
+			for (Clause<T> c2 : clauseList) {
+				List<Clause<T>> pair = new ArrayList<Clause<T>>();
+				pair.add(c1);
+				pair.add(c2);
+				listOfPairs.add(pair);
+			}
+		}
+		return listOfPairs;
+	}
+	
+	/**
+	 * If clauses can be resolved (there is same literal in both clauses with
+	 * different sign) it resolves them, returns NULL otherwise. If one of the
+	 * clauses is Empty, return empty clause.
+	 * @param c1	first clause
+	 * @param c2	second clause
+	 * @return NULL if clauses cannot be resolved, otherwise resolved Clause
+	 */
+	private Clause<T> resolveClauses(Clause<T> c1, Clause<T> c2) {
+		int index1 = -1, index2 = -1;		
 		
-		return TruthValues.UNKNOWN;
+		if (c1.isEmpty() || c2.isEmpty()) {
+			return new Clause<T>();
+		}
+		
+		for (int i = 0; i < c1.getLiterals().size(); i++) {
+			for (int j = 0; j < c2.getLiterals().size(); j++) {
+				Literal<T> l1 = c1.getLiterals().get(i);
+				Literal<T> l2 = c2.getLiterals().get(j);
+				if (l1.getValue().equals(l2.getValue())) {
+					if (l1.getSign() != l2.getSign()) {
+						// combine both clauses and remove l1, l2
+						index1 = i;
+						index2 = j;
+						break;
+					} 
+				}
+			}
+		}
+		if (index1 != -1) {
+			Clause<T> result = new Clause<T>();
+			for (int i = 0; i < c1.getLiterals().size(); i++) {
+				if (i != index1) {
+					result.addLiteral(c1.getLiterals().get(i));
+				}
+			}
+			for (int j = 0; j < c2.getLiterals().size(); j++) {
+				if (j != index2) {
+					result.addLiteral(c2.getLiterals().get(j));
+				}
+			}
+			return result;
+		}
+		return null;
 	}
 	
 	/**
@@ -104,4 +222,5 @@ public class CNF<T> {
 		}
 		return s;
 	}
+
 }

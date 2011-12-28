@@ -3,11 +3,14 @@ package control.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import aima.core.logic.propositional.parsing.PLVisitor;
+import aima.core.logic.propositional.parsing.ast.ComplexSentence;
+
 /**
  * 
  *
  */
-public class Clause<T> {
+public class Clause<T> extends ComplexSentence {
 	private List<Literal<T>> literals;
 	
 	/**
@@ -50,6 +53,14 @@ public class Clause<T> {
 	public void addLiteral(T value, boolean sign) {
 		literals.add(new Literal<T>(value, sign));
 	}
+	
+	/**
+	 * Adds literal to the clause.
+	 * @param literal	literal to be added
+	 */
+	public void addLiteral(Literal<T> literal) {
+		literals.add(literal);
+	}
 
 	/**
 	 * Removes literal with the specified value from the clause.
@@ -78,6 +89,12 @@ public class Clause<T> {
 		}
 		s += ") ";
 		return s;
+	}
+
+	@Override
+	public Object accept(PLVisitor plv, Object arg) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 		
 }
