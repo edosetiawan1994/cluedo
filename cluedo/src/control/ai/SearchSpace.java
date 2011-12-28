@@ -81,4 +81,16 @@ public class SearchSpace implements Observer {
 		excludeCard((Card) arg);
 	}
 
+	/**
+	 * Get all possible cards (not separated by their kind).
+	 * 
+	 * @return set of cards which could be in the envelope
+	 */
+	public Set<Card> getPossibleCards() {
+		Set<Card> allCards = new HashSet<Card>();
+		allCards.addAll(possiblePersons);
+		allCards.addAll(possibleWeapons);
+		allCards.addAll(possibleRooms);
+		return allCards;
+	}
 }

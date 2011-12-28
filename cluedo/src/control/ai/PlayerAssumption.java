@@ -28,6 +28,13 @@ public class PlayerAssumption extends Observable implements Observer {
 	private Set<Card> possibleHandCards;
 	private Set<Card> certainHandCards;
 	
+	/* (non-javadoc)
+	 * This CNF represents the knowledge base for the hand cards of this
+	 * player. Note that one literal clauses are automatically removed
+	 * (that means removed from possibleHandCards or added to certainHandCards)
+	 */
+	private CNF<Card> kb;
+	
 	/**
 	 * Sole constructor. Initialize internal data structures. 
 	 * 
@@ -42,6 +49,7 @@ public class PlayerAssumption extends Observable implements Observer {
 		this.possibleHandCards = new HashSet<Card>();
 		this.certainHandCards = new HashSet<Card>();
 		this.possibleHandCards.addAll(Card.generateAllCards());
+		this.kb = new CNF<Card>();
 	}
 	
 	/**
@@ -95,8 +103,6 @@ public class PlayerAssumption extends Observable implements Observer {
 		}
 	}
 	
-	
-	
 	/**
 	 * This method is called whenever a certain card is added somewhere else.
 	 * We can then exclude this card from our possible cards pool.
@@ -131,6 +137,13 @@ public class PlayerAssumption extends Observable implements Observer {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * @return the knowledge base for players hand cards 
+	 */
+	public CNF<Card> getKb() {
+		return kb;
 	}
 
 	/**

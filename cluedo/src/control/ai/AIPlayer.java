@@ -1,12 +1,15 @@
 package control.ai;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
 import control.Card;
 import control.Game;
+import control.Kind;
 import control.Player;
 import control.Suggestion;
 
@@ -83,13 +86,39 @@ public class AIPlayer extends Player {
 	/**
 	 * Includes reasoning about how to shrink the search space the most and how
 	 * to formulate this as a suggestion.
+	 * 
+	 * The basic approach is as follows:
+	 * 	- For each kind, fetch possible solution cards from search space
+	 *  - Rank each of these cards
+	 *  - Increase rank of card each time it occurs in PlayerAssumptions CNF
+	 *  	- Increase more if the player sits close to us
+	 *  - Suggest the best ranked cards of each kind 
 	 * {@inheritDoc}
 	 * @see control.Player#play()
 	 */
 	@Override
 	public Suggestion play() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Card> cards = searchSpace.getPossibleCards();
+		Suggestion suggestion = new Suggestion();
+		
+		// Look for unknown cards frequent in other players CNF
+		HashMap<Card, Integer> ranks = new HashMap<Card, Integer>();
+		int bestRanks[] = {-1, -1, -1}; // Dependent on Kind.size!
+		for (Card card : cards) {
+			ranks.put(card, 1);
+		}
+		int inc = assumptions.size() + 1;
+		for (PlayerAssumption assumption : assumptions) {
+			CNF<Card> cnf = assumption.getKb();
+			HashMap<Literal<Card>, Integer> literals = cnf.getAllLiterals();
+			for (Map.Entry<Literal<Card>, Integer> entry 
+					: literals.entrySet()) {
+				Card card = entry.getKey().getValue();
+			    ranks.put(card, ranks.get(card) + inc * entry.getValue());
+			}
+			inc--;
+		}
+		return suggestion;
 	}
 
 	/**
