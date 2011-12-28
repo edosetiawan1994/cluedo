@@ -23,7 +23,9 @@ public class Clause<T> {
 	 * @param literals
 	 */
 	public Clause(List<Literal<T>> literals) {
-		this.literals = literals;
+		for (Literal<T> l : literals) {
+			addLiteral(l);
+		}
 	}
 	
 	/**
@@ -43,12 +45,11 @@ public class Clause<T> {
 	
 	/**
 	 * Adds literal to the clause.
-	 * 
 	 * @param value	Value of literal
 	 * @param sign	Sign of literal
 	 */
 	public void addLiteral(T value, boolean sign) {
-		literals.add(new Literal<T>(value, sign));
+		addLiteral(new Literal<T>(value, sign));
 	}
 	
 	/**
@@ -56,7 +57,8 @@ public class Clause<T> {
 	 * @param literal	literal to be added
 	 */
 	public void addLiteral(Literal<T> literal) {
-		literals.add(literal);
+		if(!literals.contains(literal))
+			literals.add(literal);
 	}
 
 	/**

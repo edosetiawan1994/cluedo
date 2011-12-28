@@ -16,90 +16,75 @@ public class CNF<T> {
 	
 	/**
 	 * Updates CNF using the given knowledge.
-	 * @param literalValue	Literal whose value we explicitly know
-	 * @param sign	sign of the known literal
-	 * @return TruthValues	returns VALID if whole CNF is valid, UNVALID if it
-	 * 						is invalid or UNKNOWN if none of above could be yet
-	 * 						Specified
+	 * @param value	Value of the literal whose sign we explicitly know
+	 * @param sign	Sign of the known literal
+	 * @throws ArithmeticException	if an empty clause is generated 
+	 * 								(contradiction is found) 
 	 */
-	public void updateCNF(T literalValue, boolean sign) {
-		List<Clause<T>> newClauses = new ArrayList<Clause<T>>();
-		List<Literal<T>> knownLiterals = new ArrayList<Literal<T>>();
-		for (Clause<T> c : clauses) {
-			boolean valid = true;
-			if (c.isEmpty()) {
-				value = TruthValues.UNVALID;
+	public void addNewFact(T value, boolean sign) throws ArithmeticException {
+		if (!sign) {
+			for (Clause<T> c : clauses) {
+				c.removeLiteral(value);
+				if (c.isEmpty()) {
+					throw new ArithmeticException();
+				}
 			}
-			for (Literal<T> l : c.getLiterals()) {
-				if (l.getValue().equals(literalValue)) {
-					if (sign == l.getSign()) {
-						// whole clause c is true - can be discarded
-						valid = false;
-						break;
-					} else {
-						// remove the literal l from the clause
-						c.removeLiteral(literalValue);
-						if (c.isEmpty()) {
-							value = TruthValues.UNVALID;
-							return;
-						}
+		} else {
+			List<Clause<T>> newList = new ArrayList<Clause<T>>();
+			// delete whole c from clauses if l = true in c
+			for (Clause<T> c : clauses) {
+				boolean clauseOK = true;
+				for (Literal<T> l : c.getLiterals()) {
+					if (l.getValue() == value) {
+						clauseOK = false;
 						break;
 					}
 				}
-			}
-			if (valid) {
-				newClauses.add(c);
-				if (c.getLiterals().size() == 1) {
-					knownLiterals.add(c.getLiterals().get(0));
+				if (clauseOK) {
+					newList.add(c);
 				}
 			}
+			clauses = newList;
 		}
-		
-		clauses = newClauses;
-		for (Literal<T> l : knownLiterals) {
-			updateCNF(l.getValue(), l.getSign());
-		}
-		if (clauses.size() == 0) {
-			value = TruthValues.VALID;
-		} else {
-			value = TruthValues.UNKNOWN;
-		}
-		
 	}
 	
-	public TruthValues resolution() {
-		List<Clause<T>> resolvents = new ArrayList<Clause<T>>();
-		List<Clause<T>> removeClauses = new ArrayList<Clause<T>>();
-		List<Clause<T>> newList = clauses;
-		//TODO copy clauses
-		int counter = 0;
-		while (true) {
-			if (counter > 20) {
-				// prevents infinite loop
-				return TruthValues.UNKNOWN;
+	/**
+	 * Updates CNF using the given knowledge.
+	 * @param knownLiteral	Literal whose sign we explicitly know
+	 * @throws ArithmeticException	if an empty clause is generated 
+	 * 								(contradiction is found) 
+	 */
+	public void addNewFact(Literal<T> knownLiteral) 
+			throws ArithmeticException {
+		addNewFact(knownLiteral.getValue(), knownLiteral.getSign());
+	}
+	
+	/**
+	 * Searches for facts (atomic clauses) in CNF.
+	 * @return	List of facts (Literals with their values) in CNF
+	 */
+	public List<Literal<T>> getNewFacts() {
+		List<Literal<T>> facts = new ArrayList<Literal<T>>();
+		for (Clause<T> c : clauses) {
+			if (c.getLiterals().size() == 1) {
+				// found new fact
+				facts.add(c.getLiterals().get(0));
 			}
-			List<List<Clause<T>>> pairs = generatePairsOfClauses(newList);
-			for (int i = 0; i < pairs.size(); i++) {
-				List<Clause<T>> pair = pairs.get(i);
-				Clause<T> c1 = pair.get(0);
-				Clause<T> c2 = pair.get(1);
-				Clause<T> resolved = resolveClauses(c1, c2);
-				if (resolved != null) { 
-					// clauses were resolved! new clause has been generated
-					if (resolved.isEmpty()) {
-						return TruthValues.UNVALID;
-					}
-					resolvents.add(resolved);
-					removeClauses.add(c1);
-					removeClauses.add(c2);
-				}
+		}
+		return facts;
+	}
+	
+	/**
+	 * Updates CNF resolving facts it gets from atomic clauses recursively.
+	 */
+	public void updateCNF() {
+		List<Literal<T>> facts = getNewFacts();
+		while (!facts.isEmpty()) {
+			for (Literal<T> l : facts) {
+				addNewFact(l);
+				facts.addAll(getNewFacts());
+				//TODO: do not add same fact twice
 			}
-			newList.removeAll(removeClauses);
-			newList.addAll(resolvents);
-			resolvents.clear();
-			removeClauses.clear();
-			
-			counter++;
 		}
 	}
 	

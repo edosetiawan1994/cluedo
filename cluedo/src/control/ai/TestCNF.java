@@ -11,18 +11,16 @@ public class TestCNF {
 	public static void main(String[] args) {
 		CNF<String> cnf = fillClauses2();
 		System.out.println(cnf.toString());
-		
-		cnf.updateCNF("B11", false);
+		cnf.addNewFact("B11", true);
 		System.out.println(cnf.toString());
-		
-		/*System.out.println("updated: with A = true");
-		cnf.updateCNF("A", true);
+		cnf.updateCNF();
 		System.out.println(cnf.toString());
-		System.out.println("updated: with F = true");
-		cnf.updateCNF("F", true);*/
-		
-		//System.out.println("Resolution result: " + cnf.resolution());
-		System.out.println(cnf.toString());
+		/*
+		System.out.println("known facts:");
+		List<Literal<String>> facts = cnf.getNewFacts();
+		for (Literal<String> l : facts) {
+			System.out.println(l.toString());
+		}*/
 	}
 	
 	private static CNF<String> fillClauses() {
