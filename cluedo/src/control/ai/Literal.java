@@ -81,14 +81,7 @@ public class Literal<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Literal other = (Literal) obj;
-		if (sign != other.sign)
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		return true;
+		Literal<T> other = (Literal<T>) obj;
+		return sign == other.sign && value.equals(other.value);
 	}
 }

@@ -86,7 +86,6 @@ public class AIPlayer extends Player {
 	/**
 	 * Includes reasoning about how to shrink the search space the most and how
 	 * to formulate this as a suggestion.
-	 * 
 	 * The basic approach is as follows:
 	 * 	- For each kind, fetch possible solution cards from search space
 	 *  - Rank each of these cards
@@ -99,7 +98,13 @@ public class AIPlayer extends Player {
 	@Override
 	public Suggestion play() {
 		Set<Card> cards = searchSpace.getPossibleCards();
-		Suggestion suggestion = new Suggestion();
+		Suggestion suggestion = new Suggestion(
+				searchSpace.getSolutionPerson(),
+				searchSpace.getSolutionWeapon(),
+				searchSpace.getSolutionRoom());
+		if (suggestion.isComplete()) {
+			game.playerSolves(this, suggestion);
+		}
 		
 		// Look for unknown cards frequent in other players CNF
 		HashMap<Card, Integer> ranks = new HashMap<Card, Integer>();
@@ -117,6 +122,14 @@ public class AIPlayer extends Player {
 			    ranks.put(card, ranks.get(card) + inc * entry.getValue());
 			}
 			inc--;
+		}
+		for (Map.Entry<Card, Integer> entry : ranks.entrySet()) {
+			int rank = entry.getValue();
+			Card card = entry.getKey();
+			if (rank > bestRanks[card.getKind().ordinal()]) {
+				suggestion.setCard(card);
+				bestRanks[card.getKind().ordinal()] = rank; 
+			}
 		}
 		return suggestion;
 	}

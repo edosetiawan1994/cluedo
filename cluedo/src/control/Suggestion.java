@@ -1,5 +1,11 @@
 package control;
 
+/**
+ * This class represents a suggestion - i.e. a card triple of a person, weapon
+ * and room. This class is not only used to define suggestion announced by
+ * players, but also in other contexts like defining the solution envelope or
+ * solution attempts of players.
+ */
 public class Suggestion {
 	
 	private Card person;
@@ -82,5 +88,35 @@ public class Suggestion {
 			throw new IllegalArgumentException();
 		}
 		this.room = room;
+	}
+	
+	/**
+	 * Returns true if none of the cards are null.
+	 * 
+	 * @return whether one of the cards are null
+	 */
+	public boolean isComplete() {
+		return person != null && weapon != null && room != null; 
+	}
+	
+	/**
+	 * Use the given card in the suggestion. Calls setRoom(), setWeapon() or
+	 * setPerson().
+	 * 
+	 * @param card
+	 * @throws NullPointerException if card is null
+	 */
+	public void setCard(Card card) {
+		switch (card.getKind()) {
+		case PERSON:
+			setPerson(card);
+			break;
+		case WEAPON:
+			setWeapon(card);
+			break;
+		case ROOM:
+			setRoom(card);
+			break;
+		}
 	}
 }

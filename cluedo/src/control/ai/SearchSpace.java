@@ -1,6 +1,7 @@
 package control.ai;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -20,12 +21,18 @@ public class SearchSpace implements Observer {
 	private Set<Card> possiblePersons;
 	private Set<Card> possibleWeapons;
 	private Set<Card> possibleRooms;
+	private Card solPerson;
+	private Card solWeapon;
+	private Card solRoom;
 	
 	/**
 	 * Sole constructor. Initializes search space with all possible
 	 * solution combinations.
 	 */
 	public SearchSpace() {
+		solPerson = null;
+		solWeapon = null;
+		solRoom = null;
 		possiblePersons = new HashSet<Card>();
 		possibleWeapons = new HashSet<Card>();
 		possibleRooms = new HashSet<Card>();
@@ -55,17 +62,30 @@ public class SearchSpace implements Observer {
 	public void excludeCard(Card card) {
 		switch (card.getKind()) {
 		case PERSON:
-			possiblePersons.remove(card);
+			solPerson = removeFromSet(possiblePersons, card);
 			break;
 		case WEAPON:
-			possibleWeapons.remove(card);
+			solWeapon = removeFromSet(possibleWeapons, card);
 			break;
 		case ROOM:
-			possibleRooms.remove(card);
+			solRoom = removeFromSet(possibleRooms, card);
 			break;
 		default:
 			assert false;
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * Removes a card from a set. If the cardinality is 1 after the removal,
+	 * return the last element. Otherwise, return null 
+	 */
+	private Card removeFromSet(Set<Card> set, Card card) {
+		set.remove(card);
+		if (set.size() == 1) {
+			 Iterator<Card> it = set.iterator();
+			 return it.next();
+		}
+		return null;
 	}
 	
 	/* (non-Javadoc)
@@ -92,5 +112,35 @@ public class SearchSpace implements Observer {
 		allCards.addAll(possibleWeapons);
 		allCards.addAll(possibleRooms);
 		return allCards;
+	}
+
+	/**
+	 * Get the person in the envelope. Returns null if this is not fully
+	 * determined yet. 
+	 * 
+	 * @return the person in the envelope or null
+	 */
+	public Card getSolutionPerson() {
+		return solPerson;
+	}
+
+	/**
+	 * Get the weapon in the envelope. Returns null if this is not fully
+	 * determined yet. 
+	 * 
+	 * @return the weapon in the envelope or null
+	 */
+	public Card getSolutionWeapon() {
+		return solWeapon;
+	}
+
+	/**
+	 * Get the room in the envelope. Returns null if this is not fully
+	 * determined yet. 
+	 * 
+	 * @return the room in the envelope or null
+	 */
+	public Card getSolutionRoom() {
+		return solRoom;
 	}
 }
