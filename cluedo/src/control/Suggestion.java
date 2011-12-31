@@ -1,5 +1,7 @@
 package control;
 
+import java.util.List;
+
 /**
  * This class represents a suggestion - i.e. a card triple of a person, weapon
  * and room. This class is not only used to define suggestion announced by
@@ -118,5 +120,50 @@ public class Suggestion {
 			setRoom(card);
 			break;
 		}
+	}
+	
+	/**
+	 * Get a random suggestion from all possible cards.
+	 * 
+	 * @return a suggestion randomly chosen from all possible cards 
+	 */
+	static public Suggestion getRandomSuggestion() {
+		return getRandomSuggestion(Card.generateAllCards());
+	}
+	
+	/**
+	 * Get a random suggestion from the given set of cards. Remove the chosen
+	 * cards from the set.
+	 * 
+	 * @return a suggestion randomly chosen from the given set of cards 
+	 */
+	static public Suggestion getRandomSuggestion(List<Card> cards) {
+		Suggestion sugg = new Suggestion();
+		while (!sugg.isComplete()) {
+			final int index = (int) (Math.random()*cards.size());
+			boolean addCard = false;
+			switch (cards.get(index).getKind()) {
+			case PERSON:
+				if (sugg.getPerson() == null) {
+					addCard = true;
+				}
+				break;
+			case WEAPON:
+				if (sugg.getWeapon() == null) {
+					addCard = true;
+				}
+				break;
+			case ROOM:
+				if (sugg.getRoom() == null) {
+					addCard = true;
+				}
+				break;
+			}
+			if (addCard) {
+				sugg.setCard(cards.get(index));
+				cards.remove(index);
+			}
+		}
+		return sugg;
 	}
 }

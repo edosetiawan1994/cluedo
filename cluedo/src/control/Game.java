@@ -30,6 +30,7 @@ public class Game {
 		this.players = players;
 		List<Card> cards = Card.generateAllCards();
 		Collections.shuffle(cards);
+		solution = Suggestion.getRandomSuggestion(cards);
 		int from = 0, to = 0;
 		final int nCards = cards.size();
 		final int cardsPerPlayer = nCards / players.size();
@@ -42,6 +43,14 @@ public class Game {
 					+ (to - from) + " hand cards.");
 			player.beginGame(new HashSet<Card>(cards.subList(from, to)));
 		}	
+	}
+	
+	/* (non-Javadoc)
+	 * Helper method for start(). Draws the solution out of the cards and write
+	 * it into the class variable solution.
+	 */
+	private void drawSolution(List<Card> card) {
+		;
 	}
 	
 	/**
