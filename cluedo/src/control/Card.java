@@ -80,13 +80,13 @@ public class Card {
 	 * the constructor. 
 	 */
 	public static List<Card> generateAllCards() {
-		String[] persons = {"Miss Scarlett", "Colonel Mustard", "Mrs. White",
-				"Reverend Green", "Mrs. Peacock", "Professor Plum"};
-		String[] weapons = {"Candlestick", "Dagger", "Lead Pipe", "Revolver",
+		String[] persons = {"Professor Plum", "Miss Scarlett", "Colonel Mustard", "Mrs. White",
+				"Reverend Green", "Mrs. Peacock"};
+		String[] weapons = {"Candlestick", "Dagger", "Lead Piping", "Revolver",
 				"Rope", "Spanner"};
-		String[] rooms = {"Ballroom", "Kitchen", "Conservatory", "Dining Room",
-				"Billiard Room", "Library", "Hall", "Lounge", "Study"};
-		int id = 1;
+		String[] rooms = {"Hall", "Lounge", "Dining Room", "Kitchen", "Ballroom", "Conservatory", 
+				"Billiard Room", "Library", "Study"};
+		int id = 0;
 		List<Card> cards = new ArrayList<Card>();
 		for (String person : persons) {
 			cards.add(new Card(id++, person, Kind.PERSON));

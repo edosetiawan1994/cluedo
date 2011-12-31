@@ -20,6 +20,8 @@ import control.Suggestion;
  * @see control.Player
  */
 public class AIPlayer extends Player {
+	
+	private HashMap<Player, HashMap<Card, Boolean>> shownCards;
 
 	/* (non-javadoc)
 	 * Note: assumptions may not correspond to Game.players in terms of
@@ -72,15 +74,22 @@ public class AIPlayer extends Player {
 		List<Player> players = this.game.getPlayers();
 		boolean thisPlayerPassed = false; 
 		final int numPlayer = players.size();
+		shownCards = new HashMap<Player, HashMap<Card, Boolean>>();
 		for (int i = 0, j = 1; j < numPlayer; i = (i + 1) % numPlayer) {
 			if (thisPlayerPassed) {
 				assumptions.add(new PlayerAssumption(players.get(i),
 						displayUI));
+				HashMap<Card, Boolean> tmpHM = new HashMap<Card, Boolean>();
+				for (Card c : this.handCards) {
+					tmpHM.put(c, false);
+				}
+				shownCards.put(players.get(i), tmpHM);
 				j++;
 			} else if (this.equals(players.get(i))) {
 				thisPlayerPassed = true;
 			}
 		}
+		
 		// Player assumptions are observed by searchSpace and each other
 		Observable o = new Observable();
 		o.addObserver(searchSpace);
@@ -162,8 +171,26 @@ public class AIPlayer extends Player {
 		if (questionair == null || suggestion == null) {
 			throw new NullPointerException();
 		}
-		// TODO Auto-generated method stub
-		return null;
+		Card notShownCard = null;
+		if (handCards.contains(suggestion.getPerson())) {
+			if (shownCards.get(questionair).get(suggestion.getPerson())) {
+				return suggestion.getPerson();
+			}
+			notShownCard = suggestion.getPerson();
+		}
+		if (handCards.contains(suggestion.getWeapon())) {
+			if (shownCards.get(questionair).get(suggestion.getWeapon())) {
+				return suggestion.getWeapon();
+			}
+			notShownCard = suggestion.getWeapon();
+		}
+		if (handCards.contains(suggestion.getRoom())) {
+			if (shownCards.get(questionair).get(suggestion.getRoom())) {
+				return suggestion.getRoom();
+			}
+			notShownCard = suggestion.getRoom();
+		}
+		return notShownCard;
 	}
 
 	/**
