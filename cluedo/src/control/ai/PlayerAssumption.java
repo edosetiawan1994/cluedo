@@ -1,6 +1,5 @@
 package control.ai;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
@@ -81,19 +80,20 @@ public class PlayerAssumption extends Observable implements Observer {
 		}
 		
 		kb.addNewFact(new Literal<Card>(card, false));
-		/* TODO
+		
 		List<Literal<Card>> facts = kb.getNewFacts();
+		Set<Literal<Card>> alreadyAddedFacts = 
+				new HashSet<Literal<Card>>();
 		while (!facts.isEmpty()) {
-			List<Literal<Card>> addFacts = new ArrayList<Literal<Card>>();
-			for (Literal<Card> l : facts) {
-				if (l.getSign()) {
-					// we have found new certain hand card
-					addCertainHandCard(l.getValue());
-					addFacts.addAll(kb.getNewFacts());
-				}
+			Literal<Card> l = facts.get(0);
+			facts.remove(0);
+			if (l.getSign() && !alreadyAddedFacts.contains(l)) {
+				// we have found new certain hand card
+				addCertainHandCard(l.getValue());
+				alreadyAddedFacts.add(l);
+				facts.addAll(kb.getNewFacts());
 			}
-			facts.addAll(addFacts);
-		}*/
+		} 
 	}
 	
 	/**
