@@ -9,7 +9,6 @@ import java.util.Set;
 
 import control.Card;
 import control.Game;
-import control.Kind;
 import control.Player;
 import control.Suggestion;
 
@@ -29,22 +28,38 @@ public class AIPlayer extends Player {
 	 */
 	private List<PlayerAssumption> assumptions;
 	
-	/* (non-javadoc)
+	/* (non-Javadoc)
 	 * Stores the current search space of possible solutions.
 	 */
 	private SearchSpace searchSpace;
+	
+	/* (non-Javadoc)
+	 * TRUE if this AI player should be displayed in the UI. 
+	 */
+	private boolean displayUI;
 	
 	/**
 	 * Sole constructor. Calls the super class constructor and initialize
 	 * class intern data structures.
 	 * {@inheritDoc}
+	 * @param displayUI if this AI player should be displayed in the UI
 	 */
-	public AIPlayer(Game game, String name, int id)
+	public AIPlayer(Game game, String name, int id, boolean displayUI)
 			throws NullPointerException {
 		super(game, name, id);
+		this.displayUI = displayUI;
 		assumptions = new LinkedList<PlayerAssumption>();
 		searchSpace = new SearchSpace();
 	}
+
+	/**
+	 * @return the searchSpace
+	 */
+	public SearchSpace getSearchSpace() {
+		return searchSpace;
+	}
+
+
 
 	/* (non-Javadoc)
 	 * @see control.Player#beginGame(java.util.Set)
@@ -59,7 +74,8 @@ public class AIPlayer extends Player {
 		final int numPlayer = players.size();
 		for (int i = 0, j = 1; j < numPlayer; i = (i + 1) % numPlayer) {
 			if (thisPlayerPassed) {
-				assumptions.add(new PlayerAssumption(players.get(i)));
+				assumptions.add(new PlayerAssumption(players.get(i),
+						displayUI));
 				j++;
 			} else if (this.equals(players.get(i))) {
 				thisPlayerPassed = true;

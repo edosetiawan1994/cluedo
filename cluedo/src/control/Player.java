@@ -65,6 +65,20 @@ public abstract class Player {
 	}
 	
 	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
 	 * This method indicates that the players turn has begun. Therefore, the
 	 * player has to announce a suggestion when this method is called. The
 	 * player receives the answer from the game logic via receiveAnswer

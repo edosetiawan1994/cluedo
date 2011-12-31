@@ -1,10 +1,12 @@
 package control.ai;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.List;
+
+import ui.UIController;
 
 import control.Card;
 import control.Player;
@@ -29,6 +31,11 @@ public class PlayerAssumption extends Observable implements Observer {
 	private Set<Card> possibleHandCards;
 	private Set<Card> certainHandCards;
 	
+	/* (non-Javadoc)
+	 * TRUE if this AI player assumption should be displayed in the UI. 
+	 */
+	private boolean displayUI;
+	
 	/* (non-javadoc)
 	 * This CNF represents the knowledge base for the hand cards of this
 	 * player. Note that one literal clauses are automatically removed
@@ -40,12 +47,15 @@ public class PlayerAssumption extends Observable implements Observer {
 	 * Sole constructor. Initialize internal data structures. 
 	 * 
 	 * @param player associated player instance
+	 * @param displayUI if this AI player should be displayed in the UI
 	 * @throws NullPointerException if player is null
 	 */
-	public PlayerAssumption(Player player) throws NullPointerException {
+	public PlayerAssumption(Player player, boolean displayUI)
+			throws NullPointerException {
 		if (player == null) {
 			throw new NullPointerException();
 		}
+		this.displayUI = displayUI;
 		this.player = player;
 		this.possibleHandCards = new HashSet<Card>();
 		this.certainHandCards = new HashSet<Card>();
@@ -93,7 +103,13 @@ public class PlayerAssumption extends Observable implements Observer {
 				alreadyAddedFacts.add(l);
 				facts.addAll(kb.getNewFacts());
 			}
-		} 
+		}
+		
+		if (displayUI) {
+			UIController.updateCNFPanel(player, kb.toString());
+			UIController.updatePossibleHandCardsPanel(player,
+					possibleHandCards);
+		}
 	}
 	
 	/**
@@ -122,6 +138,11 @@ public class PlayerAssumption extends Observable implements Observer {
 		
 		// remove all clauses with card = true
 		kb.addNewFact(card, true);
+		
+		if (displayUI) {
+			UIController.updateCNFPanel(player, kb.toString());
+			UIController.updateCertainHandCardsPanel(player, certainHandCards);
+		}
 	}
 	
 	/**
