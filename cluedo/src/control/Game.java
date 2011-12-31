@@ -1,5 +1,7 @@
 package control;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -14,7 +16,20 @@ public class Game {
 	
 	private List<Player> players;
 	
-	public void start() {
+	public void start(List<Player> players) {
+		this.players = players;
+		List<Card> cards = Card.generateAllCards();
+		Collections.shuffle(cards);
+		int from = 0, to = 0;
+		final int nCards = cards.size();
+		final int cardsPerPlayer = nCards / players.size();
+		for (Player player : players) {
+			to = from + cardsPerPlayer;
+			if (nCards - to % cardsPerPlayer != 0) {
+				to++;
+			}
+			player.beginGame(new HashSet<Card>(cards.subList(from, to)));
+		}
 		
 	}
 
