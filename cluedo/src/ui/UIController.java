@@ -8,18 +8,52 @@ import java.util.Set;
 
 /**
  * This class handles the communication between control units (in control.*) and
- * the user interface.
+ * the user interface. This class uses the GoF design pattern Singleton.
  */
-public class UIController {
+public abstract class UIController {
+	
+	static private UIController singleton = null;
+	
+	/**
+	 * Get the singleton for controlling the UI. This has not to be called from
+	 * outside the class. User classes should stick to the static methods.
+	 * 
+	 * @see CommandLineUIController
+	 * @see GUIController
+	 */
+	static public UIController getSingleton() {
+		if (singleton == null) {
+			switchToCommandLine(); // Configure the default UI here
+		}
+		return singleton;
+	}
+	
+	/**
+	 * Switch to command line interface.
+	 * 
+	 * @see CommandLineUIController
+	 * @see #getSingleton()
+	 */
+	static public void switchToCommandLine() {
+		singleton = new CommandLineUIController();
+	}
+	
+	/**
+	 * Switch to graphical user interface.
+	 * 
+	 * @see GUIController
+	 * @see #getSingleton()
+	 */
+	static public void switchToGUI() {
+		singleton = new GUIController();
+	}
 	
 	/**
 	 * Display a new log message on the screen.
 	 * 
 	 * @param str new log message
 	 */
-	static public void newLogMessage(String str) {
-		;
-	}
+	abstract public void newLogMessage(String str);
 	
 	/**
 	 * Update the panel for displaying certain hand cards.
@@ -28,10 +62,8 @@ public class UIController {
 	 * 			updated
 	 * @param cards new hand cards
 	 */
-	static public void updateCertainHandCardsPanel
-			(Player player, Set<Card> cards) {
-		;
-	}
+	abstract public void updateCertainHandCardsPanel
+			(Player player, Set<Card> cards);
 	
 	/**
 	 * Update the panel for displaying possible hand cards.
@@ -40,10 +72,8 @@ public class UIController {
 	 * 			updated
 	 * @param cards new possible hand cards
 	 */
-	static public void updatePossibleHandCardsPanel
-			(Player player, Set<Card> cards) {
-		;
-	}
+	abstract public void updatePossibleHandCardsPanel
+			(Player player, Set<Card> cards);
 	
 	/**
 	 * Update the panel for displaying the solution. If one of the elements is
@@ -53,9 +83,7 @@ public class UIController {
 	 * 			updated
 	 * @param sol the current (possibly partial) solution
 	 */
-	static public void updateSolutionPanel(Player player, Suggestion sol) {
-		;
-	}
+	abstract public void updateSolutionPanel(Player player, Suggestion sol);
 	
 	/**
 	 * Update the panel for displaying the CNF.
@@ -63,9 +91,7 @@ public class UIController {
 	 * @param player the player for which the CNF should be updated
 	 * @param cnf the new CNF as string
 	 */
-	static public void updateCNFPanel(Player player, String cnf) {
-		;
-	}
+	abstract public void updateCNFPanel(Player player, String cnf);
 	
 	/**
 	 * Display that a player solves.
@@ -74,8 +100,6 @@ public class UIController {
 	 * @param sol the purposed solution
 	 * @param correct TRUE if the purposed solution is correct, FALSE otherwise
 	 */
-	static public void playerSolves
-			(Player player, Suggestion sol, boolean correct) {
-		;
-	}
+	abstract public void playerSolves
+			(Player player, Suggestion sol, boolean correct);
 }

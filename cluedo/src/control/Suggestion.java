@@ -10,6 +10,17 @@ import java.util.List;
  */
 public class Suggestion {
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return 
+			(person != null ? person : "Someone")
+			+ " with " + (weapon != null ? ("the " + weapon) : "some weapon")
+			+ " in " + (room != null ? ("the " + room) : "some room");
+	}
+
 	private Card person;
 	private Card weapon;
 	private Card room;

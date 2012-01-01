@@ -2,7 +2,10 @@ package control;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import ui.UIController;
 
 /**
@@ -17,6 +20,10 @@ public class Game {
 	
 	private List<Player> players;
 	private Suggestion solution;
+	private Player currentPlayer;
+	private Iterator<Player> playerIt;
+	private int nPlayers;
+	private UIController ui;
 	
 	/**
 	 * Starts a game without executing the first move.
@@ -25,32 +32,39 @@ public class Game {
 	 * @see #nextMove()
 	 */
 	public void start(List<Player> players) {
-		UIController.newLogMessage("Start game with "
-				+ players.size() + " players.");
+		ui = UIController.getSingleton();
+		ui.newLogMessage("Start game with " + players.size() + " players.");
 		this.players = players;
+		nPlayers = players.size();
+		playerIt = players.iterator();
 		List<Card> cards = Card.generateAllCards();
 		Collections.shuffle(cards);
 		solution = Suggestion.getRandomSuggestion(cards);
 		int from = 0, to = 0;
 		final int nCards = cards.size();
-		final int cardsPerPlayer = nCards / players.size();
+		final int cardsPerPlayer = nCards / nPlayers;
 		for (Player player : players) {
 			to = from + cardsPerPlayer;
-			if (nCards - to % cardsPerPlayer != 0) {
+			if ((nCards - to) % cardsPerPlayer != 0) {
 				to++;
 			}
-			UIController.newLogMessage(player.getName() + " gets "
+			ui.newLogMessage(player.getName() + " gets "
 					+ (to - from) + " hand cards.");
 			player.beginGame(new HashSet<Card>(cards.subList(from, to)));
+			from = to;
 		}	
 	}
 	
 	/* (non-Javadoc)
-	 * Helper method for start(). Draws the solution out of the cards and write
-	 * it into the class variable solution.
+	 * This method handles circular iteration. If the iterator has no next
+	 * element, it is set to the begin of players. The next player is returned
+	 * then.
 	 */
-	private void drawSolution(List<Card> card) {
-		;
+	private Player nextPlayer() {
+		if (!playerIt.hasNext()) {
+			playerIt = players.iterator();
+		}
+		return playerIt.next();
 	}
 	
 	/**
@@ -59,7 +73,36 @@ public class Game {
 	 * been asked or a player answered.
 	 */
 	public void nextMove() {
-		;
+		boolean disproved = false;
+		currentPlayer = nextPlayer();
+		Suggestion sugg = currentPlayer.play();
+		ui.newLogMessage(currentPlayer.getName() 
+				+ ": \"I suggest it was " + sugg.toString() + ".\"");
+		Set<Player> couldNotAnswer = new HashSet<Player>();
+		Player answerer = null;
+		Card card = null;
+		for (int i = 0; i < nPlayers; i++) {
+			Player askedPlayer = nextPlayer();
+			if (disproved) {
+				continue;
+			}
+			card = askedPlayer.receiveSuggestion(currentPlayer, sugg);
+			if (card != null) {
+				ui.newLogMessage(askedPlayer
+						+ " shows a card to " + currentPlayer + ".");
+				answerer = askedPlayer;
+				disproved = true;
+			} else {
+				ui.newLogMessage(askedPlayer
+						+ " cannot disprove this suggestion.");
+				couldNotAnswer.add(askedPlayer);
+			}
+		}
+		currentPlayer.receiveAnswer(sugg, card, answerer, couldNotAnswer);
+		for (int i = 0; i < nPlayers; i++) {
+			Player player = nextPlayer();
+			player.observeMove(sugg, currentPlayer, answerer, couldNotAnswer);
+		}
 	}
 
 	/**
@@ -89,7 +132,7 @@ public class Game {
 		if (player == null || suggestion == null) {
 			throw new NullPointerException();
 		}
-		UIController.playerSolves(player, suggestion,
+		ui.playerSolves(player, suggestion,
 				solution.getPerson().equals(suggestion.getPerson())
 				 && solution.getWeapon().equals(suggestion.getWeapon())
 				 && solution.getRoom().equals(suggestion.getRoom()));

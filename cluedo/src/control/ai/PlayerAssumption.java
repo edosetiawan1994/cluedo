@@ -26,15 +26,16 @@ import control.Player;
  * @see java.util.Observable
  */
 public class PlayerAssumption extends Observable implements Observer {
-	
+
 	private Player player;
 	private Set<Card> possibleHandCards;
 	private Set<Card> certainHandCards;
 	
 	/* (non-Javadoc)
-	 * TRUE if this AI player assumption should be displayed in the UI. 
+	 * The UIController singleton if this AI player assumption should be 
+	 * displayed in the UI, null otherwise. 
 	 */
-	private boolean displayUI;
+	private UIController ui;
 	
 	/* (non-javadoc)
 	 * This CNF represents the knowledge base for the hand cards of this
@@ -55,7 +56,7 @@ public class PlayerAssumption extends Observable implements Observer {
 		if (player == null) {
 			throw new NullPointerException();
 		}
-		this.displayUI = displayUI;
+		ui = displayUI ? UIController.getSingleton() : null;
 		this.player = player;
 		this.possibleHandCards = new HashSet<Card>();
 		this.certainHandCards = new HashSet<Card>();
@@ -105,10 +106,9 @@ public class PlayerAssumption extends Observable implements Observer {
 			}
 		}
 		
-		if (displayUI) {
-			UIController.updateCNFPanel(player, kb.toString());
-			UIController.updatePossibleHandCardsPanel(player,
-					possibleHandCards);
+		if (ui != null) {
+			ui.updateCNFPanel(player, kb.toString());
+			ui.updatePossibleHandCardsPanel(player, possibleHandCards);
 		}
 	}
 	
@@ -139,9 +139,9 @@ public class PlayerAssumption extends Observable implements Observer {
 		// remove all clauses with card = true
 		kb.addNewFact(card, true);
 		
-		if (displayUI) {
-			UIController.updateCNFPanel(player, kb.toString());
-			UIController.updateCertainHandCardsPanel(player, certainHandCards);
+		if (ui != null) {
+			ui.updateCNFPanel(player, kb.toString());
+			ui.updateCertainHandCardsPanel(player, certainHandCards);
 		}
 	}
 	
@@ -200,5 +200,13 @@ public class PlayerAssumption extends Observable implements Observer {
 	 */
 	public Set<Card> getCertainHandCards() {
 		return certainHandCards;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Assumption about " + player;
 	}
 }

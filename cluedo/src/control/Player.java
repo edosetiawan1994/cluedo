@@ -135,7 +135,7 @@ public abstract class Player {
 	 */
 	@Override
 	public String toString() {
-		return "Player " + name;
+		return name;
 	}
 
 	/* (non-Javadoc)

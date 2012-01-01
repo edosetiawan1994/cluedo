@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import ui.UIController;
+
 import control.Card;
 import control.Game;
 import control.Player;
@@ -70,6 +72,7 @@ public class AIPlayer extends Player {
 	public void beginGame(Set<Card> handCards) throws NullPointerException {
 		super.beginGame(handCards);
 		// Generate assumptions, starting with left neighbor
+		// Also initialize shownHandCards
 		assumptions.clear();
 		List<Player> players = this.game.getPlayers();
 		boolean thisPlayerPassed = false; 
@@ -161,7 +164,7 @@ public class AIPlayer extends Player {
 
 	/**
 	 * Decide which card (if any) should be shown. Takes into account the
-	 * knowledge about other players hand cards.
+	 * knowledge about which cards were already shown to which players.
 	 * {@inheritDoc}
 	 * @see control.Player#receiveSuggestion(control.Suggestion)
 	 */
@@ -171,24 +174,32 @@ public class AIPlayer extends Player {
 		if (questionair == null || suggestion == null) {
 			throw new NullPointerException();
 		}
+		HashMap<Card, Boolean> playersShownCards = shownCards.get(questionair); 
 		Card notShownCard = null;
-		if (handCards.contains(suggestion.getPerson())) {
-			if (shownCards.get(questionair).get(suggestion.getPerson())) {
-				return suggestion.getPerson();
+		Card shownCard = null;
+		Card[] cards = {suggestion.getPerson(),
+			suggestion.getWeapon(), suggestion.getRoom()};
+		for (Card card : cards) {
+			if (handCards.contains(card)) {
+				if (playersShownCards.get(card)) {
+					shownCard = card;
+					break;
+				}
+				notShownCard = card;
 			}
-			notShownCard = suggestion.getPerson();
 		}
-		if (handCards.contains(suggestion.getWeapon())) {
-			if (shownCards.get(questionair).get(suggestion.getWeapon())) {
-				return suggestion.getWeapon();
+		if (shownCard == null) { // There is no card already shown
+			if (notShownCard != null) { // Mark card as already shown
+				playersShownCards.put(notShownCard, true);
 			}
-			notShownCard = suggestion.getWeapon();
+		} else {
+			notShownCard = shownCard;
 		}
-		if (handCards.contains(suggestion.getRoom())) {
-			if (shownCards.get(questionair).get(suggestion.getRoom())) {
-				return suggestion.getRoom();
-			}
-			notShownCard = suggestion.getRoom();
+		if (displayUI && notShownCard != null) {
+			UIController.getSingleton().newLogMessage("Show " + notShownCard 
+					+ " to disprove suggestion (" 
+					+ (shownCard == null ? "not " : "")
+					+ "already shown to this player).");
 		}
 		return notShownCard;
 	}
@@ -207,10 +218,18 @@ public class AIPlayer extends Player {
 			throws NullPointerException {
 		if (suggestion == null || couldNotAnswer == null) {
 			throw new NullPointerException();
-		} else {
-			couldNotAnswer(suggestion, couldNotAnswer);
+		}
+		couldNotAnswer(suggestion, couldNotAnswer);
+		if (answerer != null) {
 			PlayerAssumption pa = getPlayerAssumption(answerer);
 			pa.addCertainHandCard(card);
+			if (displayUI) {
+				UIController.getSingleton().newLogMessage(answerer
+					+ " disproves the suggestion by showing " + card);
+			}
+		} else if (displayUI) {
+			UIController.getSingleton().newLogMessage("Nobody can disprove "
+					+ "the suggestion.");
 		}
 	}
 	
@@ -245,27 +264,29 @@ public class AIPlayer extends Player {
 			throws NullPointerException {
 		if (suggestion == null || couldNotAnswer == null) {
 			throw new NullPointerException();
-		} else {
-			couldNotAnswer(suggestion, couldNotAnswer);
-			PlayerAssumption pa = getPlayerAssumption(answerer);
-			boolean addClause = true;
-			Card person = suggestion.getPerson();
-			Card room = suggestion.getRoom();
-			Card weapon = suggestion.getWeapon();
+		}
+		if (answerer == null || equals(answerer)) { // Not interesting
+			return;
+		}
+		couldNotAnswer(suggestion, couldNotAnswer);
+		PlayerAssumption pa = getPlayerAssumption(answerer);
+		boolean addClause = true;
+		Card person = suggestion.getPerson();
+		Card room = suggestion.getRoom();
+		Card weapon = suggestion.getWeapon();
 			
-			for (Card c : pa.getCertainHandCards()) {
-				if (c.equals(person) || c.equals(room) || c.equals(weapon)) {
-					addClause = false;
-				}
+		for (Card c : pa.getCertainHandCards()) {
+			if (c.equals(person) || c.equals(room) || c.equals(weapon)) {
+				addClause = false;
 			}
+		}
 			
-			if (addClause) {
-				Clause<Card> clause = new Clause<Card>();
-				clause.addLiteral(person, true);
-				clause.addLiteral(room, true);
-				clause.addLiteral(weapon, true);
-				pa.getKb().addClause(clause);
-			}
+		if (addClause) {
+			Clause<Card> clause = new Clause<Card>();
+			clause.addLiteral(person, true);
+			clause.addLiteral(room, true);
+			clause.addLiteral(weapon, true);
+			pa.getKb().addClause(clause);
 		}
 	}
 	
@@ -277,7 +298,7 @@ public class AIPlayer extends Player {
 	 * @throws IllegalArgumentException	if requested player's PlayerAssumption
 	 * 									does not exist
 	 */
-	public PlayerAssumption getPlayerAssumption(Player player) 
+	private PlayerAssumption getPlayerAssumption(Player player) 
 			throws IllegalArgumentException {
 		for (PlayerAssumption pa : assumptions) {
 			if (pa.getPlayer().equals(player)) {

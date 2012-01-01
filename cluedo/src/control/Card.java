@@ -11,6 +11,7 @@ import java.util.List;
  * @see #generateAllCards()
  */
 public class Card {
+
 	private int id;
 	private String name;
 	private Kind kind;
@@ -72,6 +73,14 @@ public class Card {
 			return false;
 		}
 		return id == ((Card) obj).id;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return name;
 	}
 	
 	/**
