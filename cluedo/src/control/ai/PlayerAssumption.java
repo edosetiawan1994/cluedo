@@ -167,7 +167,10 @@ public class PlayerAssumption extends Observable implements Observer {
 				clause.addLiteral(card, true);
 			}
 		}
-		if (!clause.isEmpty()) {
+		List<Literal<Card>> literals = clause.getLiterals();
+		if (literals.size() == 1) { // New certain hand card
+			addCertainHandCard(literals.get(0).getValue());
+		} else if (!clause.isEmpty()) { // New clause
 			kb.addClause(clause);
 			if (ui != null) {
 				ui.updateCNFPanel(player, kb.toString());

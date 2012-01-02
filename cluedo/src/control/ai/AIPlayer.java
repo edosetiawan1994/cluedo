@@ -280,10 +280,10 @@ public class AIPlayer extends Player {
 		if (suggestion == null || couldNotAnswer == null) {
 			throw new NullPointerException();
 		}
+		couldNotAnswer(suggestion, couldNotAnswer);
 		if (answerer == null || equals(answerer)) { // Not interesting
 			return;
 		}
-		couldNotAnswer(suggestion, couldNotAnswer);
 		PlayerAssumption pa = getPlayerAssumption(answerer);
 		pa.addAnsweredSuggestion(suggestion);
 	}

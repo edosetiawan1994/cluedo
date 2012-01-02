@@ -33,7 +33,7 @@ public class CNF<T> {
 			for (Clause<T> c : clauses) {
 				boolean clauseOK = true;
 				for (Literal<T> l : c.getLiterals()) {
-					if (l.getValue() == value) {
+					if (l.getValue().equals(value)) {
 						clauseOK = false;
 						break;
 					}
