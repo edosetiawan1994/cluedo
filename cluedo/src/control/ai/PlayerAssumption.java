@@ -10,6 +10,7 @@ import ui.UIController;
 
 import control.Card;
 import control.Player;
+import control.Suggestion;
 
 /**
  * This class maintains the knowledge about hand cards of other players. It
@@ -142,6 +143,37 @@ public class PlayerAssumption extends Observable implements Observer {
 		if (ui != null) {
 			ui.updateCNFPanel(player, kb.toString());
 			ui.updateCertainHandCardsPanel(player, certainHandCards);
+		}
+	}
+	
+	/**
+	 * Call this method when the subjected player answered a suggestion hidden
+	 * from the AI player. It will add a suitable clause to the knowledge base
+	 * if none of the cards in the suggestion are in the certain hand cards.
+	 * 
+	 * @param sugg suggestion to add
+	 * @throws NullPointerException if the parameter is null or one of the card
+	 * 		in the suggestion is null
+	 */
+	public void addAnsweredSuggestion(Suggestion sugg) 
+			throws NullPointerException {
+		Card person = sugg.getPerson();
+		Card weapon = sugg.getWeapon();
+		Card room = sugg.getRoom();
+		
+		if (certainHandCards.contains(person)
+				|| certainHandCards.contains(weapon)
+				|| certainHandCards.contains(room)) {
+			return;
+		}
+			
+		Clause<Card> clause = new Clause<Card>();
+		clause.addLiteral(person, true);
+		clause.addLiteral(room, true);
+		clause.addLiteral(weapon, true);
+		kb.addClause(clause);
+		if (ui != null) {
+			ui.updateCNFPanel(player, kb.toString());
 		}
 	}
 	

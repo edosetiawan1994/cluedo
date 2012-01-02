@@ -135,14 +135,10 @@ public class CNF<T> {
 	@Override
 	public String toString() {
 		String s = "";
-		s += value.toString() + "\n";
-		if (clauses.size() > 0) {
-			s += clauses.get(0).toString();
-			for (int i = 1; i < clauses.size(); i++) {
-				s += " ^ " + clauses.get(i).toString();
-			}
+		for (Clause<T> clause : clauses) {
+			s += " ^ " + clause;
 		}
-		return s;
+		return s.length() == 0 ? "empty" : s.substring(3);
 	}
 
 }

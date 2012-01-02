@@ -243,10 +243,12 @@ public class AIPlayer extends Player {
 	private void couldNotAnswer(Suggestion suggestion, 
 			Set<Player> couldNotAnswer) {
 		for (Player p : couldNotAnswer) {
-			PlayerAssumption pa = getPlayerAssumption(p);
-			pa.removePossibleCard(suggestion.getPerson());
-			pa.removePossibleCard(suggestion.getRoom());
-			pa.removePossibleCard(suggestion.getWeapon());
+			if (!equals(p)) {
+				PlayerAssumption pa = getPlayerAssumption(p);
+				pa.removePossibleCard(suggestion.getPerson());
+				pa.removePossibleCard(suggestion.getRoom());
+				pa.removePossibleCard(suggestion.getWeapon());
+			}
 		}
 	}
 
@@ -270,24 +272,7 @@ public class AIPlayer extends Player {
 		}
 		couldNotAnswer(suggestion, couldNotAnswer);
 		PlayerAssumption pa = getPlayerAssumption(answerer);
-		boolean addClause = true;
-		Card person = suggestion.getPerson();
-		Card room = suggestion.getRoom();
-		Card weapon = suggestion.getWeapon();
-			
-		for (Card c : pa.getCertainHandCards()) {
-			if (c.equals(person) || c.equals(room) || c.equals(weapon)) {
-				addClause = false;
-			}
-		}
-			
-		if (addClause) {
-			Clause<Card> clause = new Clause<Card>();
-			clause.addLiteral(person, true);
-			clause.addLiteral(room, true);
-			clause.addLiteral(weapon, true);
-			pa.getKb().addClause(clause);
-		}
+		pa.addAnsweredSuggestion(suggestion);
 	}
 	
 	/**

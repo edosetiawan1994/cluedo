@@ -101,7 +101,10 @@ public class Game {
 		currentPlayer.receiveAnswer(sugg, card, answerer, couldNotAnswer);
 		for (int i = 0; i < nPlayers; i++) {
 			Player player = nextPlayer();
-			player.observeMove(sugg, currentPlayer, answerer, couldNotAnswer);
+			if (!player.equals(currentPlayer)) {
+				player.observeMove(
+						sugg, currentPlayer, answerer, couldNotAnswer);
+			}
 		}
 	}
 
