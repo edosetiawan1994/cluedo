@@ -68,5 +68,6 @@ public class CommandLineUIController extends UIController {
 	public void playerSolves(Player player, Suggestion sol, boolean correct) {
 		System.out.println(player + " solves "
 				+ (correct ? "" : "in") + "correctly with " + sol);
+		System.exit(0);
 	}
 }

@@ -78,6 +78,9 @@ public class PlayerAssumption extends Observable implements Observer {
 		if (card == null) {
 			throw new NullPointerException();
 		}
+		if (!possibleHandCards.contains(card)) {
+			return;
+		}
 		this.possibleHandCards.remove(card);
 		if (this.certainHandCards.size() + this.possibleHandCards.size() 
 				== this.player.countHandCards()) {
@@ -127,7 +130,8 @@ public class PlayerAssumption extends Observable implements Observer {
 		if (card == null) {
 			throw new NullPointerException();
 		}
-		if (!this.possibleHandCards.contains(card)) {
+		if (!possibleHandCards.contains(card)
+				|| certainHandCards.contains(card)) {
 			return; // Already added / not possible
 		}
 		this.certainHandCards.add(card);

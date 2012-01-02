@@ -81,7 +81,7 @@ public class Game {
 		Set<Player> couldNotAnswer = new HashSet<Player>();
 		Player answerer = null;
 		Card card = null;
-		for (int i = 0; i < nPlayers; i++) {
+		for (int i = 1; i < nPlayers; i++) {
 			Player askedPlayer = nextPlayer();
 			if (disproved) {
 				continue;
@@ -98,14 +98,13 @@ public class Game {
 				couldNotAnswer.add(askedPlayer);
 			}
 		}
+		nextPlayer();
 		currentPlayer.receiveAnswer(sugg, card, answerer, couldNotAnswer);
-		for (int i = 0; i < nPlayers; i++) {
+		for (int i = 1; i < nPlayers; i++) {
 			Player player = nextPlayer();
-			if (!player.equals(currentPlayer)) {
-				player.observeMove(
-						sugg, currentPlayer, answerer, couldNotAnswer);
-			}
+			player.observeMove(sugg, currentPlayer, answerer, couldNotAnswer);
 		}
+		nextPlayer();
 	}
 
 	/**
