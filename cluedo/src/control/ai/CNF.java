@@ -7,11 +7,9 @@ import java.util.List;
 
 public class CNF<T> {
 	private List<Clause<T>> clauses;
-	private TruthValues value;
 
 	public CNF() {
 		this.clauses = new ArrayList<Clause<T>>();
-		this.value = TruthValues.UNKNOWN;
 	}
 	
 	/**

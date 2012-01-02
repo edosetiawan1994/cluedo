@@ -73,6 +73,10 @@ public class AIPlayer extends Player {
 		super.beginGame(handCards);
 		// Generate assumptions, starting with left neighbor
 		// Also initialize shownHandCards
+		if (displayUI) {
+			UIController.getSingleton().newLogMessage("Hand cards are "
+					+ handCards);
+		}
 		assumptions.clear();
 		List<Player> players = this.game.getPlayers();
 		boolean thisPlayerPassed = false; 
@@ -94,7 +98,13 @@ public class AIPlayer extends Player {
 		}
 		
 		// Player assumptions are observed by searchSpace and each other
-		Observable o = new Observable();
+		Observable o = new Observable() {
+			@Override
+			public void notifyObservers(Object arg) {
+				this.setChanged();
+				super.notifyObservers(arg);
+			}
+		};
 		o.addObserver(searchSpace);
 		for (PlayerAssumption assumption : assumptions) {
 			assumption.addObserver(searchSpace);

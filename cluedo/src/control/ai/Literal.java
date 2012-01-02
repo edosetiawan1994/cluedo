@@ -81,6 +81,7 @@ public class Literal<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		@SuppressWarnings("unchecked")
 		Literal<T> other = (Literal<T>) obj;
 		return sign == other.sign && value.equals(other.value);
 	}
