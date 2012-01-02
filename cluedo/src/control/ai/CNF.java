@@ -85,6 +85,14 @@ public class CNF<T> {
 		}
 	}
 	
+	
+	/**
+	 * Removes all clauses from the CNF.
+	 */
+	public void clear() {
+		clauses.clear();
+	}
+	
 	/**
 	 * Returns all literals in the CNF (contained in at least one clause)
 	 * with their quantity.

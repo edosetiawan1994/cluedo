@@ -83,12 +83,14 @@ public class PlayerAssumption extends Observable implements Observer {
 				== this.player.countHandCards()) {
 			this.certainHandCards.addAll(possibleHandCards);
 			possibleHandCards.clear();
+			kb.clear();
 			// Notify about more cards than necessary, but otherwise we have
 			// conflicts with the removal mechanism in addCertainHandCard()
 			for (Card certainCard : certainHandCards) {
 				this.setChanged();
 				this.notifyObservers(certainCard);
 			}
+			return;
 		}
 		
 		kb.addNewFact(new Literal<Card>(card, false));
