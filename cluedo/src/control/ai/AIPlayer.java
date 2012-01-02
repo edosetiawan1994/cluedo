@@ -149,6 +149,9 @@ public class AIPlayer extends Player {
 				Card card = entry.getKey().getValue();
 			    ranks.put(card, ranks.get(card) + inc * entry.getValue());
 			}
+			for (Card card : assumption.getPossibleHandCards()) {
+				ranks.put(card, ranks.get(card) + inc);
+			}
 			inc--;
 		}
 		for (Map.Entry<Card, Integer> entry : ranks.entrySet()) {

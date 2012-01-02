@@ -108,8 +108,8 @@ public class PlayerAssumption extends Observable implements Observer {
 		}
 		
 		if (ui != null) {
-			ui.updateCNFPanel(player, kb.toString());
 			ui.updatePossibleHandCardsPanel(player, possibleHandCards);
+			ui.updateCNFPanel(player, kb.toString());
 		}
 	}
 	
@@ -141,8 +141,8 @@ public class PlayerAssumption extends Observable implements Observer {
 		kb.addNewFact(card, true);
 		
 		if (ui != null) {
-			ui.updateCNFPanel(player, kb.toString());
 			ui.updateCertainHandCardsPanel(player, certainHandCards);
+			ui.updateCNFPanel(player, kb.toString());
 		}
 	}
 	
@@ -157,23 +157,21 @@ public class PlayerAssumption extends Observable implements Observer {
 	 */
 	public void addAnsweredSuggestion(Suggestion sugg) 
 			throws NullPointerException {
-		Card person = sugg.getPerson();
-		Card weapon = sugg.getWeapon();
-		Card room = sugg.getRoom();
-		
-		if (certainHandCards.contains(person)
-				|| certainHandCards.contains(weapon)
-				|| certainHandCards.contains(room)) {
-			return;
-		}
-			
+		Card[] cards = {sugg.getPerson(), sugg.getWeapon(), sugg.getRoom()};
 		Clause<Card> clause = new Clause<Card>();
-		clause.addLiteral(person, true);
-		clause.addLiteral(room, true);
-		clause.addLiteral(weapon, true);
-		kb.addClause(clause);
-		if (ui != null) {
-			ui.updateCNFPanel(player, kb.toString());
+		for (Card card : cards) {
+			if (certainHandCards.contains(card)) {
+				return;
+			}
+			if (possibleHandCards.contains(card)) {
+				clause.addLiteral(card, true);
+			}
+		}
+		if (!clause.isEmpty()) {
+			kb.addClause(clause);
+			if (ui != null) {
+				ui.updateCNFPanel(player, kb.toString());
+			}
 		}
 	}
 	
