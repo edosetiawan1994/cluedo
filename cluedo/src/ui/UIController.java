@@ -79,11 +79,9 @@ public abstract class UIController {
 	 * Update the panel for displaying the solution. If one of the elements is
 	 * null, this element is not determined yet.
 	 * 
-	 * @param player the player for which the possible hand cards should be
-	 * 			updated
 	 * @param sol the current (possibly partial) solution
 	 */
-	abstract public void updateSolutionPanel(Player player, Suggestion sol);
+	abstract public void updateSolutionPanel(Suggestion sol);
 	
 	/**
 	 * Update the panel for displaying the CNF.

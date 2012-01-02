@@ -48,7 +48,7 @@ public class CommandLineUIController extends UIController {
 	 * 		(control.Player, control.Suggestion)
 	 */
 	@Override
-	public void updateSolutionPanel(Player player, Suggestion sol) {
+	public void updateSolutionPanel(Suggestion sol) {
 		// TODO Auto-generated method stub
 		System.out.println("Current solution: " + sol);
 	}

@@ -53,7 +53,7 @@ public class AIPlayer extends Player {
 		super(game, name, id);
 		this.displayUI = displayUI;
 		assumptions = new LinkedList<PlayerAssumption>();
-		searchSpace = new SearchSpace();
+		searchSpace = new SearchSpace(displayUI);
 	}
 
 	/**

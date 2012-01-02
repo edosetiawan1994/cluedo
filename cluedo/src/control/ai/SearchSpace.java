@@ -6,7 +6,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import ui.UIController;
+
 import control.Card;
+import control.Suggestion;
 
 /**
  * This class maintains the search space (i.e. possible solution combinations).
@@ -24,12 +27,16 @@ public class SearchSpace implements Observer {
 	private Card solPerson;
 	private Card solWeapon;
 	private Card solRoom;
+	private boolean displayUI;
 	
 	/**
 	 * Sole constructor. Initializes search space with all possible
 	 * solution combinations.
+	 * 
+	 * @param displayUI if this AI player should be displayed in the UI
 	 */
-	public SearchSpace() {
+	public SearchSpace(boolean displayUI) {
+		this.displayUI = displayUI;
 		solPerson = null;
 		solWeapon = null;
 		solRoom = null;
@@ -60,18 +67,32 @@ public class SearchSpace implements Observer {
 	 * @throws NullPointerException if card is null
 	 */
 	public void excludeCard(Card card) {
+		boolean updateUI = false;
 		switch (card.getKind()) {
 		case PERSON:
 			solPerson = removeFromSet(possiblePersons, card);
+			if (solPerson != null) {
+				updateUI = true;
+			}
 			break;
 		case WEAPON:
 			solWeapon = removeFromSet(possibleWeapons, card);
+			if (solWeapon != null) {
+				updateUI = true;
+			}
 			break;
 		case ROOM:
 			solRoom = removeFromSet(possibleRooms, card);
+			if (solRoom != null) {
+				updateUI = true;
+			}
 			break;
 		default:
 			assert false;
+		}
+		if (displayUI && updateUI) {
+			UIController.getSingleton().updateSolutionPanel(
+				new Suggestion(solPerson, solWeapon, solRoom));
 		}
 	}
 	

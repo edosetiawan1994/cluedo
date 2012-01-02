@@ -43,11 +43,10 @@ public class GUIController extends UIController {
 	}
 
 	/* (non-Javadoc)
-	 * @see ui.UIController#updateSolutionPanel
-	 * 		(control.Player, control.Suggestion)
+	 * @see ui.UIController#updateSolutionPanel(control.Suggestion)
 	 */
 	@Override
-	public void updateSolutionPanel(Player player, Suggestion sol) {
+	public void updateSolutionPanel(Suggestion sol) {
 		// TODO To be implemented
 	}
 
