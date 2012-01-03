@@ -7,8 +7,19 @@ package control;
  * @see control.Card
  */
 public enum Kind {
+	/**
+	 * The card shows a suspect.
+	 */
 	PERSON,
+	
+	/**
+	 * The card shows a possible room.
+	 */
 	ROOM,
+	
+	/**
+	 * The card shows a possible weapon.
+	 */
 	WEAPON;
 	
 	public static final int size = 3;

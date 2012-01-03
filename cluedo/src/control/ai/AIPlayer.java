@@ -42,18 +42,33 @@ public class AIPlayer extends Player {
 	 */
 	private boolean displayUI;
 	
+	/* (non-Javadoc)
+	 * Following variables describe the level of intelligence for the player
+	 */
+	private boolean doHandCardsTracking, doCardRanking, doCnfReasoning;
+	
 	/**
 	 * Sole constructor. Calls the super class constructor and initialize
 	 * class intern data structures.
 	 * {@inheritDoc}
 	 * @param displayUI if this AI player should be displayed in the UI
+	 * @param intelligence integer specifying the level of intelligence for
+	 * 		this player. See control.ai.AIAbility for further information
+	 * 		how to define this level
+	 * @see control.ai.AIAbility
 	 */
-	public AIPlayer(Game game, String name, int id, boolean displayUI)
-			throws NullPointerException {
+	public AIPlayer(Game game, String name, int id, boolean displayUI,
+			int intelligence) throws NullPointerException {
 		super(game, name, id);
 		this.displayUI = displayUI;
 		assumptions = new LinkedList<PlayerAssumption>();
 		searchSpace = new SearchSpace(displayUI);
+		doHandCardsTracking = 0 <
+				(AIAbility.HAND_CARDS_TRACKING.getId() & intelligence);
+		doCardRanking = 0 <
+				(AIAbility.CARD_RANKING.getId() & intelligence);
+		doCnfReasoning = 0 <
+				(AIAbility.CNF_REASONING.getId() & intelligence);
 	}
 
 	/**
@@ -96,7 +111,17 @@ public class AIPlayer extends Player {
 				thisPlayerPassed = true;
 			}
 		}
-		
+		setUpObservers();
+	}
+	
+	/* (non-Javadoc)
+	 * This is a helper function for beginGame(..). Set up the observer
+	 * relationships - basically everybody observes everything. Also use this 
+	 * relationships to propagate the own hand cards.
+	 * 
+	 * @see #beginGame(Set<Card>)
+	 */
+	private void setUpObservers() {
 		// Player assumptions are observed by searchSpace and each other
 		Observable o = new Observable() {
 			@Override
@@ -135,7 +160,6 @@ public class AIPlayer extends Player {
 	 */
 	@Override
 	public Suggestion play() {
-		Set<Card> cards = searchSpace.getPossibleCards();
 		Suggestion suggestion = new Suggestion(
 				searchSpace.getSolutionPerson(),
 				searchSpace.getSolutionWeapon(),
@@ -145,25 +169,8 @@ public class AIPlayer extends Player {
 		}
 		
 		// Look for unknown cards frequent in other players CNF
-		HashMap<Card, Integer> ranks = new HashMap<Card, Integer>();
+		HashMap<Card, Integer> ranks = getRanks();
 		int bestRanks[] = {-1, -1, -1}; // Dependent on Kind.size!
-		for (Card card : cards) {
-			ranks.put(card, 1);
-		}
-		int inc = assumptions.size() + 1;
-		for (PlayerAssumption assumption : assumptions) {
-			CNF<Card> cnf = assumption.getKb();
-			HashMap<Literal<Card>, Integer> literals = cnf.getAllLiterals();
-			for (Map.Entry<Literal<Card>, Integer> entry 
-					: literals.entrySet()) {
-				Card card = entry.getKey().getValue();
-			    ranks.put(card, ranks.get(card) + inc * entry.getValue());
-			}
-			for (Card card : assumption.getPossibleHandCards()) {
-				ranks.put(card, ranks.get(card) + inc);
-			}
-			inc--;
-		}
 		for (Map.Entry<Card, Integer> entry : ranks.entrySet()) {
 			int rank = entry.getValue();
 			Card card = entry.getKey();
@@ -173,6 +180,38 @@ public class AIPlayer extends Player {
 			}
 		}
 		return suggestion;
+	}
+	
+	/* (non-Javadoc)
+	 * This is a helper method for play(). Get all possible cards in the search
+	 * space and rank them. This is used to include favorable cards in a
+	 * suggestion.
+	 * 
+	 * @see #play()
+	 */
+	private HashMap<Card, Integer> getRanks() {
+		Set<Card> cards = searchSpace.getPossibleCards();
+		HashMap<Card, Integer> ranks = new HashMap<Card, Integer>();
+		for (Card card : cards) {
+			ranks.put(card, 1);
+		}
+		if (doCardRanking) {
+			int inc = assumptions.size() + 1;
+			for (PlayerAssumption assumption : assumptions) {
+				CNF<Card> cnf = assumption.getKb();
+				HashMap<Literal<Card>, Integer> literals = cnf.getAllLiterals();
+				for (Map.Entry<Literal<Card>, Integer> entry 
+						: literals.entrySet()) {
+					Card card = entry.getKey().getValue();
+				    ranks.put(card, ranks.get(card) + inc * entry.getValue());
+				}
+				for (Card card : assumption.getPossibleHandCards()) {
+					ranks.put(card, ranks.get(card) + inc);
+				}
+				inc--;
+			}
+		}
+		return ranks;
 	}
 
 	/**
@@ -284,8 +323,10 @@ public class AIPlayer extends Player {
 		if (answerer == null || equals(answerer)) { // Not interesting
 			return;
 		}
-		PlayerAssumption pa = getPlayerAssumption(answerer);
-		pa.addAnsweredSuggestion(suggestion);
+		if (doCnfReasoning) {
+			PlayerAssumption pa = getPlayerAssumption(answerer);
+			pa.addAnsweredSuggestion(suggestion);
+		}
 	}
 	
 	/**

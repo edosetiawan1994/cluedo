@@ -11,7 +11,8 @@ import java.util.Set;
  *
  * @see control.Game
  * @see control.Game#getPlayers()
- * @see control.ai.AI
+ * @see control.ai.AIPlayer
+ * @see control.StupidPlayer
  */
 public abstract class Player {
 	

@@ -4,6 +4,7 @@ import ui.UIController;
 import control.Player;
 import control.Game;
 import control.StupidPlayer;
+import control.ai.AIAbility;
 import control.ai.AIPlayer;
 
 import java.io.BufferedReader;
@@ -23,7 +24,13 @@ import java.util.List;
 public class CommandLineStarter {
 
 	/**
-	 * @param args
+	 * This is the main runner method when using command line interface. After
+	 * basic sanity checks, it starts a game with the specified number of
+	 * different kinds of players. Then a basic menu command line is lunched to
+	 * control the game flow via keyboard.
+	 * 
+	 * @param args ([#ai [#stupid]]) specifies the number of stupid and AI
+	 * 		players
 	 */
 	public static void main(String[] args) {
 		UIController.switchToCommandLine();
@@ -56,13 +63,17 @@ public class CommandLineStarter {
 	 */
 	private static void beginGame(int nAi, int nStupid) {
 		List<Player> players = new LinkedList<Player>();
+		final int fullIntelligence = AIAbility.HAND_CARDS_TRACKING.getId()
+				+ AIAbility.CARD_RANKING.getId()
+				+ AIAbility.CNF_REASONING.getId();
 		nAi--;
 		Game game = new Game();
 		int id = 1;
-		players.add(new AIPlayer(game, "Myself", id++, true));
+		players.add(new AIPlayer(
+				game, "Myself", id++, true, fullIntelligence));
 		for (; nAi > 0; nAi--) { // Add AI players
 			players.add(new AIPlayer(game, "AI" + String.valueOf(id),
-					id++, false));
+					id++, false, fullIntelligence));
 		}
 		for (; nStupid > 0; nStupid--) { // Add stupid players
 			players.add(new StupidPlayer(game, "Stupid" + String.valueOf(id),
