@@ -58,7 +58,6 @@ public abstract class Player {
 	 * Get the number of hand cards (equal to the cardinality of the
 	 * argument in the last call of beginGame(), 0 default)
 	 * 
-	 * @see #setHandCards(List)
 	 * @return size of this.handCards
 	 */
 	public int countHandCards() {
@@ -84,8 +83,8 @@ public abstract class Player {
 	 * player has to announce a suggestion when this method is called. The
 	 * player receives the answer from the game logic via receiveAnswer
 	 * 
-	 * @see #receiveAnswer(Card, Player)
-	 * @return
+	 * @see #receiveAnswer(Suggestion, Card, Player, Set)
+	 * @return the suggestion the player announces
 	 */
 	public abstract Suggestion play();
 	
@@ -110,7 +109,7 @@ public abstract class Player {
 	 * @param card card which was shown by answerer
 	 * @param answerer player which answered
 	 * @param couldNotAnswer set of players which could not answer
-	 * @see #observeMove(Suggestion, Player, Set)
+	 * @see #observeMove(Suggestion, Player, Player, Set)
 	 * @throws NullPointerException if suggestion is null
 	 */
 	public abstract void receiveAnswer(Suggestion suggestion, Card card,

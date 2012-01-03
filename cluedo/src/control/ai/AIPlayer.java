@@ -50,12 +50,13 @@ public class AIPlayer extends Player {
 	/**
 	 * Sole constructor. Calls the super class constructor and initialize
 	 * class intern data structures.
-	 * {@inheritDoc}
+	 * 
 	 * @param displayUI if this AI player should be displayed in the UI
 	 * @param intelligence integer specifying the level of intelligence for
 	 * 		this player. See control.ai.AIAbility for further information
 	 * 		how to define this level
 	 * @see control.ai.AIAbility
+	 * @see control.Player#Player(Game, String, int)
 	 */
 	public AIPlayer(Game game, String name, int id, boolean displayUI,
 			int intelligence) throws NullPointerException {
@@ -220,7 +221,7 @@ public class AIPlayer extends Player {
 	 * Decide which card (if any) should be shown. Takes into account the
 	 * knowledge about which cards were already shown to which players.
 	 * {@inheritDoc}
-	 * @see control.Player#receiveSuggestion(control.Suggestion)
+	 * @see control.Player#receiveSuggestion(control.Player,control.Suggestion)
 	 */
 	@Override
 	public Card receiveSuggestion(Player questionair, Suggestion suggestion)
