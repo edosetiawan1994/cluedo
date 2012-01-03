@@ -16,7 +16,7 @@ public enum AIAbility {
 	 * Refers to the ability of keep track of possible and certain hand cards
 	 * of all advisors.
 	 */
-	HAND_CARDS_TRACKING(0),
+	HAND_CARDS_TRACKING(1),
 	
 	/**
 	 * Use card ranking to figure out good cards for including it in a 

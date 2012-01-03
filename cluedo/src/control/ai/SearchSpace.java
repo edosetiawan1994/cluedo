@@ -134,6 +134,22 @@ public class SearchSpace implements Observer {
 		allCards.addAll(possibleRooms);
 		return allCards;
 	}
+	
+	/**
+	 * Set the solution combination directly. This is used when low level AI
+	 * agents are lucky enough to suggest the correct combination and nobody
+	 * can disprove the suggestion. Note that after calling this function, the
+	 * stored solution and the set of remaining possible cards may not be
+	 * consistent.
+	 * 
+	 * @param sol a suggestion containing the solution
+	 * @throws NullPointerException if the parameter is null
+	 */
+	public void setSolution(Suggestion sol) throws NullPointerException {
+		solPerson = sol.getPerson();
+		solWeapon = sol.getWeapon();
+		solRoom = sol.getRoom();
+	}
 
 	/**
 	 * Get the person in the envelope. Returns null if this is not fully

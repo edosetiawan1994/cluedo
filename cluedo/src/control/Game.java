@@ -24,6 +24,7 @@ public class Game {
 	private Iterator<Player> playerIt;
 	private int nPlayers;
 	private UIController ui;
+	private int nextMoveCount;
 	
 	/**
 	 * Starts a game without executing the first move.
@@ -36,6 +37,7 @@ public class Game {
 		ui.newLogMessage("Start game with " + players.size() + " players.");
 		this.players = players;
 		nPlayers = players.size();
+		nextMoveCount = nPlayers;
 		playerIt = players.iterator();
 		List<Card> cards = Card.generateAllCards();
 		Collections.shuffle(cards);
@@ -105,6 +107,7 @@ public class Game {
 			player.observeMove(sugg, currentPlayer, answerer, couldNotAnswer);
 		}
 		nextPlayer();
+		nextMoveCount++;
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class Game {
 		if (player == null || suggestion == null) {
 			throw new NullPointerException();
 		}
-		ui.playerSolves(player, suggestion,
+		ui.playerSolves(player, nextMoveCount / nPlayers, suggestion,
 				solution.getPerson().equals(suggestion.getPerson())
 				 && solution.getWeapon().equals(suggestion.getWeapon())
 				 && solution.getRoom().equals(suggestion.getRoom()));

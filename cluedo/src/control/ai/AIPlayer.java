@@ -131,12 +131,14 @@ public class AIPlayer extends Player {
 			}
 		};
 		o.addObserver(searchSpace);
-		for (PlayerAssumption assumption : assumptions) {
-			assumption.addObserver(searchSpace);
-			o.addObserver(assumption);
-			for (PlayerAssumption otherAssumption : assumptions) {
-				if (otherAssumption != assumption) {
-					assumption.addObserver(otherAssumption);
+		if (doHandCardsTracking) {
+			for (PlayerAssumption assumption : assumptions) {
+				assumption.addObserver(searchSpace);
+				o.addObserver(assumption);
+				for (PlayerAssumption otherAssumption : assumptions) {
+					if (otherAssumption != assumption) {
+						assumption.addObserver(otherAssumption);
+					}
 				}
 			}
 		}
@@ -273,15 +275,23 @@ public class AIPlayer extends Player {
 		}
 		couldNotAnswer(suggestion, couldNotAnswer);
 		if (answerer != null) {
-			PlayerAssumption pa = getPlayerAssumption(answerer);
-			pa.addCertainHandCard(card);
+			if (doHandCardsTracking) {
+				PlayerAssumption pa = getPlayerAssumption(answerer);
+				pa.addCertainHandCard(card);
+			} else {
+				searchSpace.excludeCard(card);
+			}
 			if (displayUI) {
 				UIController.getSingleton().newLogMessage(answerer
 					+ " disproves the suggestion by showing " + card);
 			}
-		} else if (displayUI) {
-			UIController.getSingleton().newLogMessage("Nobody can disprove "
-					+ "the suggestion.");
+		} else {
+			// Should be only necessary if doHandCardsTracking is false
+			searchSpace.setSolution(suggestion);
+			if (displayUI) {
+				UIController.getSingleton().newLogMessage("Nobody can "
+						+ "disprove the suggestion.");
+			}
 		}
 	}
 	

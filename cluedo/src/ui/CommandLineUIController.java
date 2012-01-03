@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ui;
 
 import java.util.Set;
@@ -65,9 +62,11 @@ public class CommandLineUIController extends UIController {
 	 * @see ui.UIController#playerSolves(control.Player, control.Suggestion, boolean)
 	 */
 	@Override
-	public void playerSolves(Player player, Suggestion sol, boolean correct) {
+	public void playerSolves(Player player, int round,
+			Suggestion sol, boolean correct) {
 		System.out.println(player + " solves "
-				+ (correct ? "" : "in") + "correctly with " + sol);
+				+ (correct ? "" : "in") + "correctly with " + sol + " in round "
+				+ round);
 		System.exit(0);
 	}
 }

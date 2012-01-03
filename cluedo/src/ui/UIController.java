@@ -9,6 +9,10 @@ import java.util.Set;
 /**
  * This class handles the communication between control units (in control.*) and
  * the user interface. This class uses the GoF design pattern Singleton.
+ * 
+ * @see ui.CommandLineUIController
+ * @see ui.GUIController
+ * @see ui.ExperimentModeUIController
  */
 public abstract class UIController {
 	
@@ -18,8 +22,9 @@ public abstract class UIController {
 	 * Get the singleton for controlling the UI. This has not to be called from
 	 * outside the class. User classes should stick to the static methods.
 	 * 
-	 * @see CommandLineUIController
-	 * @see GUIController
+	 * @see ui.CommandLineUIController
+	 * @see ui.GUIController
+	 * @see ui.ExperimentModeUIController
 	 */
 	static public UIController getSingleton() {
 		if (singleton == null) {
@@ -46,6 +51,16 @@ public abstract class UIController {
 	 */
 	static public void switchToGUI() {
 		singleton = new GUIController();
+	}
+	
+	/**
+	 * Switch to experiment mode.
+	 * 
+	 * @see ExperimentModeUIController
+	 * @see #getSingleton()
+	 */
+	static public void switchToExperimentMode() {
+		singleton = new ExperimentModeUIController();
 	}
 	
 	/**
@@ -95,9 +110,10 @@ public abstract class UIController {
 	 * Display that a player solves.
 	 * 
 	 * @param player the player who attempted to solve
+	 * @param round the current round (first round is denoted with 1)
 	 * @param sol the purposed solution
 	 * @param correct TRUE if the purposed solution is correct, FALSE otherwise
 	 */
 	abstract public void playerSolves
-			(Player player, Suggestion sol, boolean correct);
+			(Player player, int round, Suggestion sol, boolean correct);
 }
