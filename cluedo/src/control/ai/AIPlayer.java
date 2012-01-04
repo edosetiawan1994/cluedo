@@ -177,11 +177,11 @@ public class AIPlayer extends Player {
 		
 		// Look for unknown cards frequent in other players CNF
 		HashMap<Card, Integer> ranks = getRanks();
-		int bestRanks[] = {-1, -1, -1}; // Dependent on Kind.size!
+		int bestRanks[] = {10000, 10000, 10000}; // Dependent on Kind.size!
 		for (Map.Entry<Card, Integer> entry : ranks.entrySet()) {
 			int rank = entry.getValue();
 			Card card = entry.getKey();
-			if (rank > bestRanks[card.getKind().ordinal()]) {
+			if (rank < bestRanks[card.getKind().ordinal()]) {
 				suggestion.setCard(card);
 				bestRanks[card.getKind().ordinal()] = rank; 
 			}

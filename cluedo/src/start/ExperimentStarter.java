@@ -52,8 +52,8 @@ public class ExperimentStarter {
 	 */
 	public static void main(String[] args) throws NumberFormatException {
 		UIController.switchToExperimentMode();
-		if (args.length != 3) {
-			System.err.println("Please provide three integer arguments:");
+		if (args.length != 4) {
+			System.err.println("Please provide four integer arguments:");
 			System.err.println("- Number of AI players");
 			System.err.println("- Number of stupid players");
 			System.err.println("- Level of intelligence");
