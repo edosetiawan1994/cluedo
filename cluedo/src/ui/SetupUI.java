@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+
+import control.Game;
+import control.Player;
+import control.StupidPlayer;
+import control.ai.AIPlayer;
 
 public class SetupUI {
     static JFrame setup = new JFrame();
@@ -72,7 +79,9 @@ public class SetupUI {
         
         startGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	int numPlayers = (Integer)playersStupidList.getValue()+(Integer)playersAIList.getValue();
+            	int numPlayersStupid = (Integer)playersStupidList.getValue();
+            	int numPlayersAI = (Integer)playersAIList.getValue();
+            	int numPlayers = numPlayersStupid + numPlayersAI;
             	if(numPlayers < 1 || numPlayers > 5) {
             		errorContentPaneBasic.add(errorContentPane1);
             		errorContentPaneBasic.add(errorContentPane2);
@@ -95,7 +104,31 @@ public class SetupUI {
                         }
                     });
             	} else {
-            		try { new GameUI(numPlayers+1); } catch (IOException ex) { ex.printStackTrace(); }
+            		try {
+            			List<Player> players = new LinkedList<Player>();
+            			final int fullIntelligence = 1; 
+            					//+ AIAbility.HAND_CARDS_TRACKING.getId()
+            					//+ AIAbility.CARD_RANKING.getId()
+            					//+ AIAbility.CNF_REASONING.getId()
+            					;
+            			numPlayersAI--;
+            			Game game = new Game();
+            			int id = 1;
+            			players.add(new AIPlayer(
+            					game, "Myself", id++, true, fullIntelligence));
+            			for (; numPlayersAI > 0; numPlayersAI--) { // Add AI players
+            				players.add(new AIPlayer(game, "AI" + String.valueOf(id),
+            						id++, false, fullIntelligence));
+            			}
+            			for (; numPlayersStupid > 0; numPlayersStupid--) { // Add stupid players
+            				players.add(new StupidPlayer(game, "Stupid" + String.valueOf(id),
+            						id++));
+            			}
+            			game.start(players);
+            			new GameUI(numPlayers+1, game); 
+            		} catch (IOException ex) {
+            			ex.printStackTrace(); 
+            		}
             		setup.setVisible(false);
             	}
             }

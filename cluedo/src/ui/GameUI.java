@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import control.Game;
+
 public class GameUI {
 	// declaration of main frame, main panel and subpanels
     static JFrame game = new JFrame();
@@ -78,7 +80,7 @@ public class GameUI {
     static JTextArea cnfPlayer5 = new JTextArea();
     static JTextArea cnfPlayer6 = new JTextArea();
     
-	public GameUI(int numPlayers) throws IOException {
+	public GameUI(int numPlayers, final Game nonUIGame) throws IOException {
 		// addition of subpanels 1-5 to main panel
 		gameContentPaneBasic.setLayout(anchorLayout);
 		gameContentPaneBasic.add(gameContentPane1aCards, new AnchorConstraint(0, 712, 120, 0, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
@@ -291,6 +293,11 @@ public class GameUI {
             	game.setVisible(false);
             }
         });
+        nextMove.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	nonUIGame.nextMove();
+            }
+        });
         
         // preparation of main frame
         game.add(gameContentPaneBasic);
@@ -302,7 +309,7 @@ public class GameUI {
 	
 	public static void main(String[] args) {
 		try {
-			new GameUI(2);
+			new GameUI(2, new Game());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

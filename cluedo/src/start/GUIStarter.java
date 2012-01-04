@@ -1,5 +1,6 @@
 package start;
 
+import ui.SetupUI;
 import ui.UIController;
 
 /**
@@ -19,6 +20,6 @@ public class GUIStarter {
 	 */
 	public static void main(String[] args) {
 		UIController.switchToGUI();
-		// TODO to be implemented (Martin)
+		new SetupUI();
 	}
 }
