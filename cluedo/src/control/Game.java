@@ -45,9 +45,11 @@ public class Game {
 		int from = 0, to = 0;
 		final int nCards = cards.size();
 		final int cardsPerPlayer = nCards / nPlayers;
+		int nRemaningPlayers = nPlayers;
 		for (Player player : players) {
+			nRemaningPlayers--;
 			to = from + cardsPerPlayer;
-			if ((nCards - to) % cardsPerPlayer != 0) {
+			if (nCards - to > cardsPerPlayer * nRemaningPlayers) {
 				to++;
 			}
 			ui.newLogMessage(player.getName() + " gets "

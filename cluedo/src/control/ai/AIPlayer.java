@@ -89,10 +89,8 @@ public class AIPlayer extends Player {
 		super.beginGame(handCards);
 		// Generate assumptions, starting with left neighbor
 		// Also initialize shownHandCards
-		if (displayUI) {
-			UIController.getSingleton().newLogMessage("Hand cards are "
-					+ handCards);
-		}
+		UIController.getSingleton().newLogMessage("(" + getName()
+				+ " hand cards are " + handCards + ")");
 		assumptions.clear();
 		List<Player> players = this.game.getPlayers();
 		boolean thisPlayerPassed = false; 

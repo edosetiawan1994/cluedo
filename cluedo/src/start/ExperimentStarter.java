@@ -45,14 +45,19 @@ public class ExperimentStarter {
 	 *  	round and with which suggestion.
 	 *  
 	 * @param args string array with three elements as described above
-	 * @throws IndexOutOfBoundsException if args has not 3 elements
 	 * @throws NullPointerException if one element in args is null
 	 * @throws NumberFormatException if one element in args does not contain an 
 	 * 		integer.
 	 */
-	public static void main(String[] args) throws 
-			IndexOutOfBoundsException, NumberFormatException {
+	public static void main(String[] args) throws NumberFormatException {
 		UIController.switchToExperimentMode();
+		if (args.length != 3) {
+			System.err.println("Please provide three integer arguments:");
+			System.err.println("- Number of players");
+			System.err.println("- Level of intelligence");
+			System.err.println("- Number of games");
+			System.exit(1);
+		}
 		nPlayers = Integer.parseInt(args[0]);
 		intelligence = Integer.parseInt(args[1]);
 		nGames = Integer.parseInt(args[2]);
@@ -64,12 +69,12 @@ public class ExperimentStarter {
 	 * intelligence level intelligence.
 	 */
 	private static void playGames() {
-		for (; nGames >= 0; nGames--) {
+		for (; nGames > 0; nGames--) {
 			List<Player> players = new LinkedList<Player>();
 			Game game = new Game();
-			for (int i = 0; i < nPlayers; i++) {
+			for (int i = 1; i <= nPlayers; i++) {
 				players.add(
-						new AIPlayer(game, "AI" + i, i, true, intelligence));
+						new AIPlayer(game, "Player " + i, i, true, intelligence));
 			}
 			game.start(players);
 			gameEnded = false;
@@ -92,7 +97,11 @@ public class ExperimentStarter {
 	 */
 	public static void playerSolves(Player player, int round, Suggestion sol,
 			boolean correct) {
-		// TODO: implement this (Felix)
+		if (!correct) {
+			System.err.println("Player solved incorrectly!");
+			System.exit(0);
+		}
+		System.out.println(player + ";"  + round + ";" + sol);
 		gameEnded = true;
 	}
 }
