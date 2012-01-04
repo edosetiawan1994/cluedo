@@ -21,7 +21,7 @@ public class GUIController extends UIController {
 	 */
 	@Override
 	public void newLogMessage(String str) {
-		// TODO To be implemented (Martin)
+		GameUI.logOutput.insert(str+"\n", 0);
 	}
 
 	/* (non-Javadoc)

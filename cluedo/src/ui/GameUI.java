@@ -24,6 +24,19 @@ import javax.swing.JTextArea;
 
 import control.Game;
 
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
 public class GameUI {
 	// declaration of main frame, main panel and subpanels
     static JFrame game = new JFrame();
@@ -33,7 +46,7 @@ public class GameUI {
     static JPanel gameContentPane1c = new JPanel(new GridLayout(2,0));
     static JPanel gameContentPane1d = new JPanel(new GridLayout(2,0));
     static JPanel gameContentPane1e = new JPanel(new GridLayout(2,0));
-    static JScrollPane gameContentPane2 = new JScrollPane();
+    static JPanel gameContentPane2 = new JPanel();
     static JPanel gameContentPane3 = new JPanel();
     static JPanel gameContentPane4 = new JPanel();
     static JPanel gameContentPane5 = new JPanel();
@@ -68,7 +81,7 @@ public class GameUI {
 	static JPanel gameContentPane1eCardsPossible = new JPanel();
 	static JScrollPane gameContentPane1eCardsPossibleScroll = new JScrollPane();
 	static JPanel gameContentPane1eCNF = new JPanel();
-    
+	    
 	// declaration of components for subpanels
 	static AnchorLayout anchorLayout = new AnchorLayout();
     static JButton exitProgram = new JButton("exit program");
@@ -79,6 +92,7 @@ public class GameUI {
     static JTextArea cnfPlayer4 = new JTextArea();
     static JTextArea cnfPlayer5 = new JTextArea();
     static JTextArea cnfPlayer6 = new JTextArea();
+    JScrollPane scrollPane = new JScrollPane(logOutput); 
     
 	public GameUI(int numPlayers, final Game nonUIGame) throws IOException {
 		// addition of subpanels 1-5 to main panel
@@ -147,8 +161,8 @@ public class GameUI {
     	}
 		gameContentPane1eCards.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-    	gameContentPane2.setPreferredSize(new java.awt.Dimension(285, 768));
-    	gameContentPane2.setViewportView(logOutput);
+        gameContentPane2.setPreferredSize(new java.awt.Dimension(500,800));
+		gameContentPane2.add(logOutput);
 		gameContentPane3.add(exitProgram);
 		gameContentPane3.add(nextMove);
     	gameContentPane3.setPreferredSize(new java.awt.Dimension(596, 293));
@@ -280,12 +294,9 @@ public class GameUI {
     	
         // preparation of text area for log output
         logOutput.setEditable(false);
-        logOutput.append("LOG OUTPUT:\n\n");
-        logOutput.append("first log statement\n");
-        logOutput.append("second log statement\n");
-        logOutput.append("many more statements to come\n");
-        gameContentPane2.setViewportView(logOutput);
-        logOutput.setPreferredSize(new java.awt.Dimension(267, 753));
+        logOutput.setLineWrap(true);
+        logOutput.setWrapStyleWord(true);
+        logOutput.setPreferredSize(new java.awt.Dimension(500,800));
 
         // definition of buttons
         exitProgram.addActionListener(new ActionListener() {
@@ -314,4 +325,5 @@ public class GameUI {
 			ex.printStackTrace();
 		}
 	}
+	
 }
