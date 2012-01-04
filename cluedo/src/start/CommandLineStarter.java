@@ -1,6 +1,6 @@
 package start;
 
-import ui.UIController;
+import uitmp.UIController;
 import control.Player;
 import control.Game;
 import control.StupidPlayer;
@@ -19,7 +19,7 @@ import java.util.List;
  * using GUIStarter.
  * 
  * @see start.GUIStarter
- * @see ui.CommandLineUIController
+ * @see uitmp.CommandLineUIController
  */
 public class CommandLineStarter {
 
@@ -36,7 +36,7 @@ public class CommandLineStarter {
 		UIController.switchToCommandLine();
 		System.out.println("Usage: CommandLineStarter [<#ai> [<#stupid>]]");
 		System.out.println("(number of AI and stupid players)");
-		int nAi = 2, nStupid = 2;
+		int nAi = 4, nStupid = 0;
 		if (args.length > 2) {
 			System.err.println("Too many arguments.");
 			return;
@@ -63,9 +63,11 @@ public class CommandLineStarter {
 	 */
 	private static void beginGame(int nAi, int nStupid) {
 		List<Player> players = new LinkedList<Player>();
-		final int fullIntelligence = AIAbility.HAND_CARDS_TRACKING.getId()
-				+ AIAbility.CARD_RANKING.getId()
-				+ AIAbility.CNF_REASONING.getId();
+		final int fullIntelligence = 1; 
+				//+ AIAbility.HAND_CARDS_TRACKING.getId()
+				//+ AIAbility.CARD_RANKING.getId()
+				//+ AIAbility.CNF_REASONING.getId()
+				;
 		nAi--;
 		Game game = new Game();
 		int id = 1;

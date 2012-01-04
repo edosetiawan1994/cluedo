@@ -7,7 +7,7 @@ import control.Game;
 import control.Player;
 import control.Suggestion;
 import control.ai.AIPlayer;
-import ui.UIController;
+import uitmp.UIController;
 
 /**
  * This class is suitable for running large scaled experiments. It contains a
@@ -17,15 +17,15 @@ import ui.UIController;
  * one game.
  * 
  * @see control.ai.AIAbility
- * @see ui.ExperimentModeUIController
+ * @see uitmp.ExperimentModeUIController
  */
 public class ExperimentStarter {
 
 	/* (non-Javadoc)
-	 * Following three variables store the experiment settings given via
+	 * Following four variables store the experiment settings given via
 	 * command line arguments.
 	 */
-	static private int nPlayers, intelligence, nGames;
+	static private int nAIPlayers, nStupidPlayers, intelligence, nGames;
 	
 	/* (non-Javadoc)
 	 * This is set by playerSolves() to true to indicate that the current game
@@ -35,7 +35,8 @@ public class ExperimentStarter {
 	
 	/**
 	 * Main runner method. The expected command line arguments are:
-	 * 	- number of players. All players will have the same AIAbilities.
+	 * 	- number of AI players. All players will have the same AIAbilities.
+	 *  - number of stupid players.
 	 *  - level of intelligence for the players, expressed as AIAbilities.
 	 *  	For further information how to define these abilities please
 	 *  	read {@link control.ai.AIAbility}. Note that no stupid players can
@@ -44,7 +45,7 @@ public class ExperimentStarter {
 	 *  	new line on stdout formatted as csv containing who wan, in which
 	 *  	round and with which suggestion.
 	 *  
-	 * @param args string array with three elements as described above
+	 * @param args string array with four elements as described above
 	 * @throws NullPointerException if one element in args is null
 	 * @throws NumberFormatException if one element in args does not contain an 
 	 * 		integer.
@@ -53,14 +54,16 @@ public class ExperimentStarter {
 		UIController.switchToExperimentMode();
 		if (args.length != 3) {
 			System.err.println("Please provide three integer arguments:");
-			System.err.println("- Number of players");
+			System.err.println("- Number of AI players");
+			System.err.println("- Number of stupid players");
 			System.err.println("- Level of intelligence");
 			System.err.println("- Number of games");
 			System.exit(1);
 		}
-		nPlayers = Integer.parseInt(args[0]);
-		intelligence = Integer.parseInt(args[1]);
-		nGames = Integer.parseInt(args[2]);
+		nAIPlayers = Integer.parseInt(args[0]);
+		nStupidPlayers = Integer.parseInt(args[1]);
+		intelligence = Integer.parseInt(args[2]);
+		nGames = Integer.parseInt(args[3]);
 		playGames();
 	}
 	
@@ -72,9 +75,13 @@ public class ExperimentStarter {
 		for (; nGames > 0; nGames--) {
 			List<Player> players = new LinkedList<Player>();
 			Game game = new Game();
-			for (int i = 1; i <= nPlayers; i++) {
-				players.add(
-						new AIPlayer(game, "Player " + i, i, true, intelligence));
+			for (int i = 1; i <= nAIPlayers; i++) {
+				players.add(new AIPlayer(game, "AI " + i, i,
+						true, intelligence));
+			}
+			for (int i = 1; i <= nStupidPlayers; i++) {
+				players.add(new AIPlayer(game, "Stupid " + i, i + nAIPlayers,
+						true, intelligence));
 			}
 			game.start(players);
 			gameEnded = false;

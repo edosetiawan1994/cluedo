@@ -1,4 +1,4 @@
-package ui;
+package uitmp;
 
 import control.Player;
 import control.Card;
@@ -10,9 +10,9 @@ import java.util.Set;
  * This class handles the communication between control units (in control.*) and
  * the user interface. This class uses the GoF design pattern Singleton.
  * 
- * @see ui.CommandLineUIController
- * @see ui.GUIController
- * @see ui.ExperimentModeUIController
+ * @see uitmp.CommandLineUIController
+ * @see uitmp.GUIController
+ * @see uitmp.ExperimentModeUIController
  */
 public abstract class UIController {
 	
@@ -22,9 +22,9 @@ public abstract class UIController {
 	 * Get the singleton for controlling the UI. This has not to be called from
 	 * outside the class. User classes should stick to the static methods.
 	 * 
-	 * @see ui.CommandLineUIController
-	 * @see ui.GUIController
-	 * @see ui.ExperimentModeUIController
+	 * @see uitmp.CommandLineUIController
+	 * @see uitmp.GUIController
+	 * @see uitmp.ExperimentModeUIController
 	 */
 	static public UIController getSingleton() {
 		if (singleton == null) {

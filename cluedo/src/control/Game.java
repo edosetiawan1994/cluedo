@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ui.UIController;
+import uitmp.UIController;
 
 /**
  * This class contains the overall game logic of Cluedo. It controls the game

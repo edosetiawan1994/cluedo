@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
-import ui.UIController;
+import uitmp.UIController;
 
 import control.Card;
 import control.Game;
@@ -70,6 +70,12 @@ public class AIPlayer extends Player {
 				(AIAbility.CARD_RANKING.getId() & intelligence);
 		doCnfReasoning = 0 <
 				(AIAbility.CNF_REASONING.getId() & intelligence);
+		if (displayUI) {
+			UIController.getSingleton().newLogMessage("AIAbilities: "
+				+ (doHandCardsTracking ? "" : "no ") + " Hand Cards Tracking, "
+				+ (doCardRanking ? "" : "no ") + " Card Ranking, "
+				+ (doCnfReasoning ? "" : "no ") + " CNF Reasoning");
+		}
 	}
 
 	/**

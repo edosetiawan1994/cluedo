@@ -6,7 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import ui.UIController;
+import uitmp.UIController;
 
 import control.Card;
 import control.Suggestion;
