@@ -1,12 +1,12 @@
 package start;
 
-import uitmp.UIController;
+import ui.UIController;
 
 /**
  * This class is the starter class for the GUI. Use this in combination with
  * the GUI controller.
  * 
- * @see uitmp.GUIController
+ * @see ui.GUIController
  */
 public class GUIStarter {
 

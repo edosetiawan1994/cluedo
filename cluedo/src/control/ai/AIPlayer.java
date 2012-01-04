@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
-import uitmp.UIController;
+import ui.UIController;
 
 import control.Card;
 import control.Game;

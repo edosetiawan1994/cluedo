@@ -1,6 +1,6 @@
 package start;
 
-import uitmp.UIController;
+import ui.UIController;
 import control.Player;
 import control.Game;
 import control.StupidPlayer;
@@ -19,7 +19,7 @@ import java.util.List;
  * using GUIStarter.
  * 
  * @see start.GUIStarter
- * @see uitmp.CommandLineUIController
+ * @see ui.CommandLineUIController
  */
 public class CommandLineStarter {
 

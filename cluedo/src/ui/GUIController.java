@@ -1,26 +1,27 @@
-package uitmp;
+package ui;
 
 import java.util.Set;
-
-import start.ExperimentStarter;
 
 import control.Card;
 import control.Player;
 import control.Suggestion;
 
 /**
- * This class controls the UI in experiment mode. Since there is now UI in 
- * experiment mode, most of the methods are trivially implemented here. This
- * UIController implementation is similar to GoF design pattern null object.
+ * This class bundles the communication ways between the graphical user 
+ * interface and the controller. In order to activate this class, change the
+ * default value in getSingleton() or use switchToGui().
+ * 
+ * @see ui.UIController#getSingleton()
+ * @see ui.UIController#switchToGUI()
  */
-public class ExperimentModeUIController extends UIController {
+public class GUIController extends UIController {
 
 	/* (non-Javadoc)
 	 * @see ui.UIController#newLogMessage(java.lang.String)
 	 */
 	@Override
 	public void newLogMessage(String str) {
-		;
+		// TODO To be implemented (Martin)
 	}
 
 	/* (non-Javadoc)
@@ -29,7 +30,7 @@ public class ExperimentModeUIController extends UIController {
 	 */
 	@Override
 	public void updateCertainHandCardsPanel(Player player, Set<Card> cards) {
-		;
+		// TODO To be implemented (Martin)
 	}
 
 	/* (non-Javadoc)
@@ -38,7 +39,7 @@ public class ExperimentModeUIController extends UIController {
 	 */
 	@Override
 	public void updatePossibleHandCardsPanel(Player player, Set<Card> cards) {
-		;
+		// TODO To be implemented (Martin)
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +47,7 @@ public class ExperimentModeUIController extends UIController {
 	 */
 	@Override
 	public void updateSolutionPanel(Suggestion sol) {
-		;
+		// TODO To be implemented (Martin)
 	}
 
 	/* (non-Javadoc)
@@ -54,22 +55,16 @@ public class ExperimentModeUIController extends UIController {
 	 */
 	@Override
 	public void updateCNFPanel(Player player, String cnf) {
-		;
+		// TODO To be implemented (Martin)
 	}
 
-	/**
-	 * This is the only implemented method in the class. When a game ends, the
-	 * control flow is returned to the starter in order to output a csv
-	 * formatted line and start a new game.
-	 * {@inheritDoc}
-	 * @see uitmp.UIController#playerSolves
-	 * 		(control.Player, int, control.Suggestion, boolean)
-	 * @see start.ExperimentStarter#playerSolves
-	 * 		(control.Player, int, control.Suggestion, boolean)
+	/* (non-Javadoc)
+	 * @see ui.UIController#playerSolves
+	 * 		(control.Player, control.Suggestion, boolean)
 	 */
 	@Override
-	public void playerSolves(Player player, int round, Suggestion sol,
-			boolean correct) {
-		ExperimentStarter.playerSolves(player, round, sol, correct);
+	public void playerSolves(Player player,
+			int round, Suggestion sol, boolean correct) {
+		// TODO To be implemented (Martin)
 	}
 }

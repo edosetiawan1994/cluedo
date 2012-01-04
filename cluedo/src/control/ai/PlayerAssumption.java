@@ -6,7 +6,7 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.List;
 
-import uitmp.UIController;
+import ui.UIController;
 
 import control.Card;
 import control.Player;

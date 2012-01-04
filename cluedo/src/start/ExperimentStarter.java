@@ -7,7 +7,7 @@ import control.Game;
 import control.Player;
 import control.Suggestion;
 import control.ai.AIPlayer;
-import uitmp.UIController;
+import ui.UIController;
 
 /**
  * This class is suitable for running large scaled experiments. It contains a
@@ -17,7 +17,7 @@ import uitmp.UIController;
  * one game.
  * 
  * @see control.ai.AIAbility
- * @see uitmp.ExperimentModeUIController
+ * @see ui.ExperimentModeUIController
  */
 public class ExperimentStarter {
 
