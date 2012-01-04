@@ -25,7 +25,7 @@ public class AIPlayer extends Player {
 	
 	private HashMap<Player, HashMap<Card, Boolean>> shownCards;
 
-	/* (non-javadoc)
+	/* (non-Javadoc)
 	 * Note: assumptions may not correspond to Game.players in terms of
 	 * ordering. The first element in assumptions represents the left neighbor
 	 * of the AIPlayer 
@@ -206,11 +206,13 @@ public class AIPlayer extends Player {
 			int inc = assumptions.size() + 1;
 			for (PlayerAssumption assumption : assumptions) {
 				CNF<Card> cnf = assumption.getKb();
+				int nClauses = cnf.getClauses().size();
 				HashMap<Literal<Card>, Integer> literals = cnf.getAllLiterals();
 				for (Map.Entry<Literal<Card>, Integer> entry 
 						: literals.entrySet()) {
 					Card card = entry.getKey().getValue();
-				    ranks.put(card, ranks.get(card) + inc * entry.getValue());
+				    ranks.put(card, ranks.get(card)
+				    		+ inc * entry.getValue() / nClauses);
 				}
 				for (Card card : assumption.getPossibleHandCards()) {
 					ranks.put(card, ranks.get(card) + inc);
@@ -309,12 +311,14 @@ public class AIPlayer extends Player {
 	 */
 	private void couldNotAnswer(Suggestion suggestion, 
 			Set<Player> couldNotAnswer) {
-		for (Player p : couldNotAnswer) {
-			if (!equals(p)) {
-				PlayerAssumption pa = getPlayerAssumption(p);
-				pa.removePossibleCard(suggestion.getPerson());
-				pa.removePossibleCard(suggestion.getRoom());
-				pa.removePossibleCard(suggestion.getWeapon());
+		if (doHandCardsTracking) {
+			for (Player p : couldNotAnswer) {
+				if (!equals(p)) {
+					PlayerAssumption pa = getPlayerAssumption(p);
+					pa.removePossibleCard(suggestion.getPerson());
+					pa.removePossibleCard(suggestion.getRoom());
+					pa.removePossibleCard(suggestion.getWeapon());
+				}
 			}
 		}
 	}

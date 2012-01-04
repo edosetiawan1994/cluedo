@@ -63,10 +63,10 @@ public class CommandLineStarter {
 	 */
 	private static void beginGame(int nAi, int nStupid) {
 		List<Player> players = new LinkedList<Player>();
-		final int fullIntelligence = 1; 
-				//+ AIAbility.HAND_CARDS_TRACKING.getId()
-				//+ AIAbility.CARD_RANKING.getId()
-				//+ AIAbility.CNF_REASONING.getId()
+		final int fullIntelligence = 0
+				+ AIAbility.HAND_CARDS_TRACKING.getId()
+				+ AIAbility.CARD_RANKING.getId()
+				+ AIAbility.CNF_REASONING.getId()
 				;
 		nAi--;
 		Game game = new Game();
