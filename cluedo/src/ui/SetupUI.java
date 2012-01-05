@@ -19,6 +19,7 @@ import javax.swing.SpinnerNumberModel;
 import control.Game;
 import control.Player;
 import control.StupidPlayer;
+import control.ai.AIAbility;
 import control.ai.AIPlayer;
 
 public class SetupUI {
@@ -106,10 +107,10 @@ public class SetupUI {
             	} else {
             		try {
             			List<Player> players = new LinkedList<Player>();
-            			final int fullIntelligence = 1; 
-            					//+ AIAbility.HAND_CARDS_TRACKING.getId()
-            					//+ AIAbility.CARD_RANKING.getId()
-            					//+ AIAbility.CNF_REASONING.getId()
+            			final int fullIntelligence = 0
+            					+ AIAbility.HAND_CARDS_TRACKING.getId()
+            					+ AIAbility.CARD_RANKING.getId()
+            					+ AIAbility.CNF_REASONING.getId()
             					;
             			numPlayersAI--;
             			Game game = new Game();
