@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import control.Card;
+import control.Game;
 import control.Player;
 import control.Suggestion;
 
@@ -37,7 +38,6 @@ public class GUIController extends UIController {
 	@Override
 	public void updateCertainHandCardsPanel(Player player, Set<Card> cards) {
 		try {
-			if (player.getId() == 1) System.out.println("player 1");
 			if (player.getId() == 1) {
 				GameUI.gameContentPane4.removeAll();
 				GameUI.gameContentPane4.validate();
