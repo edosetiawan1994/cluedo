@@ -15,7 +15,7 @@ import java.util.Set;
  * @see control.StupidPlayer
  */
 public abstract class Player {
-	
+
 	private String name;
 	private int id;
 	protected Set<Card> handCards;
@@ -76,6 +76,13 @@ public abstract class Player {
 	 */
 	public int getId() {
 		return id;
+	}
+	
+	/**
+	 * @return the handCards
+	 */
+	public Set<Card> getHandCards() {
+		return handCards;
 	}
 
 	/**
