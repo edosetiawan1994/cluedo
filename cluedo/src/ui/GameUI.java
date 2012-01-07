@@ -193,7 +193,7 @@ public class GameUI {
     	cnfPlayer2.setEditable(false);
         cnfPlayer2.setLineWrap(true);
         cnfPlayer2.setWrapStyleWord(true);
-        cnfPlayer2.append("Player 2 CNF string");
+        //cnfPlayer2.append("Player 2 CNF string");
         cnfPlayer2.setPreferredSize(new java.awt.Dimension(848,40));
         gameContentPane1aCNF.add(cnfPlayer2);
         
@@ -208,7 +208,7 @@ public class GameUI {
     	cnfPlayer3.setEditable(false);
         cnfPlayer3.setLineWrap(true);
         cnfPlayer3.setWrapStyleWord(true);
-        cnfPlayer3.append("Player 3 CNF string");
+        //cnfPlayer3.append("Player 3 CNF string");
         cnfPlayer3.setPreferredSize(new java.awt.Dimension(848,40));
         gameContentPane1bCNF.add(cnfPlayer3);
         
@@ -223,7 +223,7 @@ public class GameUI {
     	cnfPlayer4.setEditable(false);
         cnfPlayer4.setLineWrap(true);
         cnfPlayer4.setWrapStyleWord(true);
-        cnfPlayer4.append("Player 4 CNF string");
+        //cnfPlayer4.append("Player 4 CNF string");
         cnfPlayer4.setPreferredSize(new java.awt.Dimension(848,40));
         gameContentPane1cCNF.add(cnfPlayer4);
         
@@ -238,7 +238,7 @@ public class GameUI {
     	cnfPlayer5.setEditable(false);
         cnfPlayer5.setLineWrap(true);
         cnfPlayer5.setWrapStyleWord(true);
-        cnfPlayer5.append("Player 5 CNF string");
+        //cnfPlayer5.append("Player 5 CNF string");
         cnfPlayer5.setPreferredSize(new java.awt.Dimension(848,40));
         gameContentPane1dCNF.add(cnfPlayer5);
         
@@ -254,7 +254,7 @@ public class GameUI {
     	cnfPlayer6.setEditable(false);
         cnfPlayer6.setLineWrap(true);
         cnfPlayer6.setWrapStyleWord(true);
-        cnfPlayer6.append("Player 6 CNF string");
+        //cnfPlayer6.append("Player 6 CNF string");
         cnfPlayer6.setPreferredSize(new java.awt.Dimension(848,40));
         gameContentPane1eCNF.add(cnfPlayer6);
         

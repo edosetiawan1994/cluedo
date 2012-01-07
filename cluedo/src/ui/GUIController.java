@@ -38,12 +38,14 @@ public class GUIController extends UIController {
 	@Override
 	public void updateCertainHandCardsPanel(Player player, Set<Card> cards) {
 		try {
+			Game game = new Game();
 			if (player.getId() == 1) {
 				GameUI.gameContentPane4.removeAll();
 				GameUI.gameContentPane4.validate();
 				GameUI.gameContentPane4.repaint();
 				GameUI.gameContentPane4.add(new JLabel("PLAYER 1           hand: "));
-				for (Card card : cards) {
+				Set<Card> cardsPlayer1 = game.getPlayers().get(0).getHandCards();
+				for (Card card : cardsPlayer1) {
 					GameUI.gameContentPane4.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/" + card.getId() + ".jpg")))));
 					GameUI.gameContentPane4.validate();
 					GameUI.gameContentPane4.repaint();
@@ -284,31 +286,46 @@ public class GUIController extends UIController {
 	 */
 	@Override
 	public void updateCNFPanel(Player player, String cnf) {
-		/*if (player.getId() == 2) {
-			GameUI.cnfPlayer2.append(cnf);
+		if (player.getId() == 2) {
+			GameUI.cnfPlayer2.removeAll();
+			GameUI.gameContentPane1aCNF.validate();
+			GameUI.gameContentPane1aCNF.repaint();
+			if (!cnf.equals("empty")) GameUI.cnfPlayer2.append(cnf);
 			GameUI.gameContentPane1aCNF.validate();
 			GameUI.gameContentPane1aCNF.repaint();
 		}
 		if (player.getId() == 3) {
-			GameUI.cnfPlayer3.append(cnf);
+			GameUI.cnfPlayer3.removeAll();
+			GameUI.gameContentPane1bCNF.validate();
+			GameUI.gameContentPane1bCNF.repaint();
+			if (!cnf.equals("empty")) GameUI.cnfPlayer3.append(cnf);
 			GameUI.gameContentPane1bCNF.validate();
 			GameUI.gameContentPane1bCNF.repaint();
 		}
 		if (player.getId() == 4) {
-			GameUI.cnfPlayer4.append(cnf);
+			GameUI.cnfPlayer4.removeAll();
+			GameUI.gameContentPane1cCNF.validate();
+			GameUI.gameContentPane1cCNF.repaint();
+			if (!cnf.equals("empty")) GameUI.cnfPlayer4.append(cnf);
 			GameUI.gameContentPane1cCNF.validate();
 			GameUI.gameContentPane1cCNF.repaint();
 		}
 		if (player.getId() == 5) {
-			GameUI.cnfPlayer5.append(cnf);
+			GameUI.cnfPlayer5.removeAll();
+			GameUI.gameContentPane1dCNF.validate();
+			GameUI.gameContentPane1dCNF.repaint();
+			if (!cnf.equals("empty")) GameUI.cnfPlayer5.append(cnf);
 			GameUI.gameContentPane1dCNF.validate();
 			GameUI.gameContentPane1dCNF.repaint();
 		}
 		if (player.getId() == 6) {
-			GameUI.cnfPlayer6.append(cnf);
+			GameUI.cnfPlayer6.removeAll();
 			GameUI.gameContentPane1eCNF.validate();
 			GameUI.gameContentPane1eCNF.repaint();
-		}*/
+			if (!cnf.equals("empty")) GameUI.cnfPlayer6.append(cnf);
+			GameUI.gameContentPane1eCNF.validate();
+			GameUI.gameContentPane1eCNF.repaint();
+		}
 	}
 
 	/* (non-Javadoc)
