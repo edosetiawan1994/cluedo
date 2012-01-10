@@ -28,7 +28,7 @@ public class GUIController extends UIController {
 	 */
 	@Override
 	public void newLogMessage(String str) {
-		GameUIold.logOutput.append(str+"\n");
+		GameUI.logOutput.append(str+"\n");
 	}
 
 	/* (non-Javadoc)
@@ -268,7 +268,6 @@ public class GUIController extends UIController {
 			GameUI.solutionPanel.validate();
 			GameUI.solutionPanel.repaint();
 			if (person != null) {
-				//System.out.println("solution person found");
 				GameUI.personLabel = new JLabel(new ImageIcon(ImageIO.read(
 						new File("cluedoCards/" + person.getId() + ".jpg"))));
 			} else {
@@ -276,7 +275,6 @@ public class GUIController extends UIController {
 						ImageIO.read(new File("cluedoCards/21.jpg"))));
 			}
 			if (weapon != null) {
-				//System.out.println("solution weapon found");
 				GameUI.weaponLabel = new JLabel(new ImageIcon(ImageIO.read(
 						new File("cluedoCards/" + weapon.getId() + ".jpg"))));
 			} else {
@@ -284,7 +282,6 @@ public class GUIController extends UIController {
 						ImageIO.read(new File("cluedoCards/21.jpg"))));
 			}
 			if (room != null) {
-				//System.out.println("solution room found");
 				GameUI.roomLabel = new JLabel(new ImageIcon(ImageIO.read(
 						new File("cluedoCards/" + room.getId() + ".jpg"))));
 			} else {
@@ -315,55 +312,70 @@ public class GUIController extends UIController {
 	@Override
 	public void updateCNFPanel(Player player, String cnf) {
 		if (player.getId() == 1) {
+			GameUI.player1.validate();
+			GameUI.player1.repaint();
 			GameUI.cnfPlayer1.removeAll();
 			GameUI.cnfPlayer1.validate();
 			GameUI.cnfPlayer1.repaint();
-			if (!cnf.equals("empty")) 
+			if (!cnf.equals("empty")) {
 				GameUI.cnfPlayer1.append(cnf);
+			}
 			GameUI.cnfPlayer1.validate();
 			GameUI.cnfPlayer1.repaint();
 			GameUI.player1.validate();
 			GameUI.player1.repaint();
 		}
 		if (player.getId() == 2) {
+			GameUI.player2.validate();
+			GameUI.player2.repaint();
 			GameUI.cnfPlayer2.removeAll();
 			GameUI.cnfPlayer2.validate();
 			GameUI.cnfPlayer2.repaint();
-			if (!cnf.equals("empty")) 
+			if (!cnf.equals("empty")) {
 				GameUI.cnfPlayer2.append(cnf);
+			}
 			GameUI.cnfPlayer2.validate();
 			GameUI.cnfPlayer2.repaint();
 			GameUI.player2.validate();
 			GameUI.player2.repaint();
 		}
 		if (player.getId() == 3) {
+			GameUI.player3.validate();
+			GameUI.player3.repaint();
 			GameUI.cnfPlayer3.removeAll();
 			GameUI.cnfPlayer3.validate();
 			GameUI.cnfPlayer3.repaint();
-			if (!cnf.equals("empty")) 
+			if (!cnf.equals("empty")) {
 				GameUI.cnfPlayer3.append(cnf);
+			}
 			GameUI.cnfPlayer3.validate();
 			GameUI.cnfPlayer3.repaint();
 			GameUI.player3.validate();
 			GameUI.player3.repaint();
 		}
 		if (player.getId() == 4) {
+			GameUI.player4.validate();
+			GameUI.player4.repaint();
 			GameUI.cnfPlayer4.removeAll();
 			GameUI.cnfPlayer4.validate();
 			GameUI.cnfPlayer4.repaint();
-			if (!cnf.equals("empty")) 
+			if (!cnf.equals("empty")) {
 				GameUI.cnfPlayer4.append(cnf);
+			}
 			GameUI.cnfPlayer4.validate();
 			GameUI.cnfPlayer4.repaint();
 			GameUI.player4.validate();
 			GameUI.player4.repaint();
 		}
 		if (player.getId() == 5) {
+			GameUI.player5.validate();
+			GameUI.player5.repaint();
 			GameUI.cnfPlayer5.removeAll();
 			GameUI.cnfPlayer5.validate();
 			GameUI.cnfPlayer5.repaint();
-			if (!cnf.equals("empty")) 
+			if (!cnf.equals("empty")) {
 				GameUI.cnfPlayer5.append(cnf);
+			}
 			GameUI.cnfPlayer5.validate();
 			GameUI.cnfPlayer5.repaint();
 			GameUI.player5.validate();
@@ -379,11 +391,11 @@ public class GUIController extends UIController {
 	public void playerSolves(Player player,
 			int round, Suggestion sol, boolean correct) {
 		if (correct) {
-			GameUIold.logOutput.append("========================================\n");
-			GameUIold.logOutput.append("PLAYER " + player.getId() + " SOLVED THE PUZZLE IN ROUND " + round + ".\n");
-			GameUIold.logOutput.append("The murderer " + sol.getPerson() + " who used " + sol.getWeapon() + " in " + sol.getRoom() + ".\n");
-			GameUIold.logOutput.append("========================================\n");
+			GameUI.logOutput.append("========================================\n");
+			GameUI.logOutput.append(player.getName() + " SOLVED THE PUZZLE IN ROUND " + round + ".\n");
+			GameUI.logOutput.append("The murderer " + sol.getPerson() + " who used " + sol.getWeapon() + " in " + sol.getRoom() + ".\n");
+			GameUI.logOutput.append("========================================\n");
 		}
-		GameUIold.nextMove.setEnabled(false);	
+		GameUI.nextMove.setEnabled(false);	
 	}
 }
