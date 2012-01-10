@@ -142,11 +142,12 @@ public class PlayerAssumption extends Observable implements Observer {
 		if (this.certainHandCards.size() == this.player.countHandCards()) {
 			this.possibleHandCards.clear();
 		}
-		
 		// remove all clauses with card = true
 		kb.addNewFact(card, true);
 		
 		if (ui != null) {
+			ui.updatePossibleHandCardsPanel(player, possibleHandCards);
+			ui.updateCNFPanel(player, kb.toString());
 			ui.updateCertainHandCardsPanel(player, certainHandCards);
 			ui.updateCNFPanel(player, kb.toString());
 		}

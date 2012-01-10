@@ -19,7 +19,7 @@ import control.Suggestion;
  * @see control.ai.PlayerAssumption
  * @see control.ai.AIPlayer
  */
-public class SearchSpace implements Observer {
+public class SearchSpace extends Observable implements Observer {
 	
 	private Set<Card> possiblePersons;
 	private Set<Card> possibleWeapons;

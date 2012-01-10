@@ -114,7 +114,7 @@ public class SetupUI {
             					;
             			//numPlayersAI--;
             			Game game = new Game();
-            			int id = 1;
+            			int id = 0;
             			players.add(new AIPlayer(
             					game, "Myself", id++, true, fullIntelligence));
             			for (; numPlayersAI > 0; numPlayersAI--) { // Add AI players

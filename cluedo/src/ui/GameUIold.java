@@ -1,8 +1,5 @@
 package ui;
 
-import ui.com.cloudgarden.layout.AnchorConstraint;
-import ui.com.cloudgarden.layout.AnchorLayout;
-
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -10,21 +7,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import ui.com.cloudgarden.layout.AnchorConstraint;
+import ui.com.cloudgarden.layout.AnchorLayout;
+import control.Card;
 import control.Game;
 
-public class GameUI {
+public class GameUIold {
 	// declaration of main frame, main panel and subpanels
     static JFrame game = new JFrame();
     static JPanel gameContentPaneBasic = new JPanel();
@@ -76,7 +76,7 @@ public class GameUI {
 		    
 	// declaration of components for subpanels
 	static AnchorLayout anchorLayout = new AnchorLayout();
-    static JButton exitProgram = new JButton("exit program");
+	static JButton exitProgram = new JButton("exit program");
     static JButton nextMove = new JButton("next move");
     static JTextArea logOutput = new JTextArea();
 	static JScrollPane logOutputScroll = new JScrollPane();
@@ -89,11 +89,13 @@ public class GameUI {
     static JLabel weaponLabel;
     static JLabel roomLabel;
     
-	public GameUI(int numPlayers, final Game nonUIGame) throws IOException {
+	public GameUIold(int numPlayers, final Game nonUIGame) throws IOException {
+		
 		// addition of subpanels 1-5 to main panel
 		gameContentPaneBasic.setLayout(anchorLayout);
 		gameContentPaneBasic.add(gameContentPane1aCards, new AnchorConstraint(0, 712, 120, 0, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
 		gameContentPaneBasic.add(gameContentPane1aCNF, new AnchorConstraint(120, 712, 150, 0, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
+				
 		if(numPlayers > 2) {
 			gameContentPaneBasic.add(gameContentPane1bCards, new AnchorConstraint(180, 712, 300, 0, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
 			gameContentPaneBasic.add(gameContentPane1bCNF, new AnchorConstraint(300, 712, 330, 0, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
@@ -174,18 +176,22 @@ public class GameUI {
 		gameContentPane3.add(exitProgram);
 		gameContentPane3.add(nextMove);
     	gameContentPane3.setPreferredSize(new java.awt.Dimension(596, 293));
-    	gameContentPane4.add(new JLabel("PLAYER 1           hand: "));
+    	gameContentPane4.add(new JLabel("PLAYER 1  \n handCards: "));
     	gameContentPane4.setPreferredSize(new java.awt.Dimension(545, 97));
     	gameContentPane4.setBorder(BorderFactory.createLineBorder(Color.black));
     	gameContentPane5.add(new JLabel("SOLUTION: "));
     	gameContentPane5.setPreferredSize(new java.awt.Dimension(379, 97));
     	gameContentPane5.setBorder(BorderFactory.createLineBorder(Color.black));
     	
+    	int nrPlayers = nonUIGame.getPlayers().size() - 1; //nrPlayers without our own player
+    	
+    	
     	// addition of card pictures and CNF text area for first computer player (Player 2)
-    	gameContentPane1aCardsHand.add(new JLabel("PLAYER 2           hand: "));
-    	gameContentPane1aCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1aCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1aCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+    	gameContentPane1aCardsHand.add(new JLabel("PLAYER 2 \n handCards: "));
+    	int nrHandCards = nonUIGame.getPlayers().get(1).getHandCards().size();
+    	for (int i = 0; i < nrHandCards; i++) {
+    		gameContentPane1aCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+    	}
     	gameContentPane1aCardsPossible.add(new JLabel("possible: "));
     	gameContentPane1aCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
     	gameContentPane1aCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
@@ -194,74 +200,81 @@ public class GameUI {
         cnfPlayer2.setLineWrap(true);
         cnfPlayer2.setWrapStyleWord(true);
         //cnfPlayer2.append("Player 2 CNF string");
-        cnfPlayer2.setPreferredSize(new java.awt.Dimension(848,40));
+        cnfPlayer2.setPreferredSize(new java.awt.Dimension(848,50));
         gameContentPane1aCNF.add(cnfPlayer2);
         
-    	gameContentPane1bCardsHand.add(new JLabel("PLAYER 3           hand: "));
-    	gameContentPane1bCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1bCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1bCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1bCardsPossible.add(new JLabel("possible: "));
-    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	cnfPlayer3.setEditable(false);
-        cnfPlayer3.setLineWrap(true);
-        cnfPlayer3.setWrapStyleWord(true);
-        //cnfPlayer3.append("Player 3 CNF string");
-        cnfPlayer3.setPreferredSize(new java.awt.Dimension(848,40));
-        gameContentPane1bCNF.add(cnfPlayer3);
-        
-    	gameContentPane1cCardsHand.add(new JLabel("PLAYER 4           hand: "));
-    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1cCardsPossible.add(new JLabel("possible: "));
-    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	cnfPlayer4.setEditable(false);
-        cnfPlayer4.setLineWrap(true);
-        cnfPlayer4.setWrapStyleWord(true);
-        //cnfPlayer4.append("Player 4 CNF string");
-        cnfPlayer4.setPreferredSize(new java.awt.Dimension(848,40));
-        gameContentPane1cCNF.add(cnfPlayer4);
-        
-    	gameContentPane1dCardsHand.add(new JLabel("PLAYER 5           hand: "));
-    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1dCardsPossible.add(new JLabel("possible: "));
-    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	cnfPlayer5.setEditable(false);
-        cnfPlayer5.setLineWrap(true);
-        cnfPlayer5.setWrapStyleWord(true);
-        //cnfPlayer5.append("Player 5 CNF string");
-        cnfPlayer5.setPreferredSize(new java.awt.Dimension(848,40));
-        gameContentPane1dCNF.add(cnfPlayer5);
-        
-    	gameContentPane1eCardsHand.add(new JLabel("PLAYER 6           hand: "));
-    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1eCardsPossible.add(new JLabel("possible: "));
-    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-
-    	cnfPlayer6.setEditable(false);
-        cnfPlayer6.setLineWrap(true);
-        cnfPlayer6.setWrapStyleWord(true);
-        //cnfPlayer6.append("Player 6 CNF string");
-        cnfPlayer6.setPreferredSize(new java.awt.Dimension(848,40));
-        gameContentPane1eCNF.add(cnfPlayer6);
+        if (nrPlayers > 1) {
+	    	gameContentPane1bCardsHand.add(new JLabel("PLAYER 3 \n handCards: "));
+	    	nrHandCards = nonUIGame.getPlayers().get(2).getHandCards().size();
+	    	for (int i = 0; i < nrHandCards; i++) {
+	    		gameContentPane1bCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	}
+	    	gameContentPane1bCardsPossible.add(new JLabel("possible: "));
+	    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1bCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	cnfPlayer3.setEditable(false);
+	        cnfPlayer3.setLineWrap(true);
+	        cnfPlayer3.setWrapStyleWord(true);
+	        //cnfPlayer3.append("Player 3 CNF string");
+	        cnfPlayer3.setPreferredSize(new java.awt.Dimension(848,40));
+	        gameContentPane1bCNF.add(cnfPlayer3);
+        }
+        if (nrPlayers > 2) {
+	    	gameContentPane1cCardsHand.add(new JLabel("PLAYER 4 \n handCards: "));
+	    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1cCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1cCardsPossible.add(new JLabel("possible: "));
+	    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1cCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	cnfPlayer4.setEditable(false);
+	        cnfPlayer4.setLineWrap(true);
+	        cnfPlayer4.setWrapStyleWord(true);
+	        //cnfPlayer4.append("Player 4 CNF string");
+	        cnfPlayer4.setPreferredSize(new java.awt.Dimension(848,40));
+	        gameContentPane1cCNF.add(cnfPlayer4);
+        }
+        if (nrPlayers > 3) {
+	    	gameContentPane1dCardsHand.add(new JLabel("PLAYER 5 \n handCards: "));
+	    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1dCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1dCardsPossible.add(new JLabel("possible: "));
+	    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1dCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	cnfPlayer5.setEditable(false);
+	        cnfPlayer5.setLineWrap(true);
+	        cnfPlayer5.setWrapStyleWord(true);
+	        //cnfPlayer5.append("Player 5 CNF string");
+	        cnfPlayer5.setPreferredSize(new java.awt.Dimension(848,40));
+	        gameContentPane1dCNF.add(cnfPlayer5);
+        }
+        if (nrPlayers > 4) {
+	    	gameContentPane1eCardsHand.add(new JLabel("PLAYER 6 \n handCards: "));
+	    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1eCardsHand.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1eCardsPossible.add(new JLabel("possible: "));
+	    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	    	gameContentPane1eCardsPossible.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+	
+	    	cnfPlayer6.setEditable(false);
+	        cnfPlayer6.setLineWrap(true);
+	        cnfPlayer6.setWrapStyleWord(true);
+	        //cnfPlayer6.append("Player 6 CNF string");
+	        cnfPlayer6.setPreferredSize(new java.awt.Dimension(848,40));
+	        gameContentPane1eCNF.add(cnfPlayer6);
+        }
         
         // addition of card pictures for our own player (Player 1)
-        gameContentPane4.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-        gameContentPane4.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
-        gameContentPane4.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg")))));
+        Set<Card> ownHandCards = nonUIGame.getPlayers().get(0).getHandCards();
+        for (Card c : ownHandCards) {
+        	gameContentPane4.add(new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/" + c.getId() + ".jpg")))));
+        }
         
         // addition of card pictures for the solution
         personLabel = new JLabel(new ImageIcon(ImageIO.read(new File("cluedoCards/21.jpg"))));
@@ -298,7 +311,7 @@ public class GameUI {
 	
 	public static void main(String[] args) {
 		try {
-			new GameUI(2, new Game());
+			new GameUIold(2, new Game());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
