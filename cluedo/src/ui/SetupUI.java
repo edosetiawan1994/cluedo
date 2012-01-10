@@ -112,7 +112,7 @@ public class SetupUI {
             					+ AIAbility.CARD_RANKING.getId()
             					+ AIAbility.CNF_REASONING.getId()
             					;
-            			numPlayersAI--;
+            			//numPlayersAI--;
             			Game game = new Game();
             			int id = 1;
             			players.add(new AIPlayer(
