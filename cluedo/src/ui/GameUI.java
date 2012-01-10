@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -67,6 +68,9 @@ public class GameUI {
     static JPanel player5possible = new JPanel();
     static JTextArea cnfPlayer5 = new JTextArea();
     
+    //contains panels player1 to player5
+    static JPanel players = new JPanel(new GridBagLayout());
+    
     static JPanel buttonPane = new JPanel();
     static JPanel loggPane = new JPanel();
     
@@ -90,7 +94,7 @@ public class GameUI {
         		getMaximumWindowBounds();
 		int height = window.height/6 - 10;
 		int width = window.width/4 - 20;
-		Dimension maxPaneSize = new Dimension(3 * width, height + 10);
+		Dimension maxPaneSize = new Dimension(3 * width+10, height + 30);
 	    Dimension maxHandCardSize = new Dimension(
 	    		width, height);
 	    Dimension maxPossibleCardSize = new Dimension(
@@ -124,29 +128,7 @@ public class GameUI {
     			BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         player1cards.setPreferredSize(maxHandCardSize);
         player1cards.setMaximumSize(maxHandCardSize);
-        /*
-        JScrollPane player1cardsSP = new JScrollPane(player1cards);
-        player1cardsSP.setSize(maxHandCardSize);
-        player1cardsSP.setPreferredSize(maxHandCardSize);
-        player1cardsSP.setMaximumSize(maxHandCardSize);
-        //player1cardsSP.add();
-        player1cardsSP.setHorizontalScrollBarPolicy(
-        		JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        player1cardsSP.setVerticalScrollBarPolicy(
-        		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        player1cardsSP.setBorder(BorderFactory.createEmptyBorder());
-		//playerI.add(player1cardsSP);
-        */
-        /*
-        JScrollPane p1HCsp = new JScrollPane(player1cards);
-        p1HCsp.setPreferredSize(maxHandCardSize);
-        p1HCsp.setMaximumSize(maxHandCardSize);
-        p1HCsp.setHorizontalScrollBarPolicy(
-        		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        p1HCsp.setVerticalScrollBarPolicy(
-        		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        p1HCsp.setBorder(BorderFactory.createEmptyBorder());
-		*/
+        
         gridConst = new GridBagConstraints();
         gridConst.gridwidth = 1;
         gridConst.gridx = 0;
@@ -154,9 +136,8 @@ public class GameUI {
         
         JScrollPane player1cardsSP = new JScrollPane();
 		player1.add(player1cardsSP,  gridConst);
-    	{
-    		player1cardsSP.setViewportView(player1cards);
-    	}
+    	player1cardsSP.setViewportView(player1cards);
+    	player1cardsSP.setBorder(BorderFactory.createEmptyBorder());
         
 		player1.add(player1cardsSP, gridConst);
         
@@ -167,34 +148,29 @@ public class GameUI {
 		player1possible.setPreferredSize(maxPossibleCardSize);
 		player1possible.setMaximumSize(maxPossibleCardSize);
 		
-		
-		
-		/*
-		JScrollPane p1PCsp = new JScrollPane(player1possible);
-		p1PCsp.setHorizontalScrollBarPolicy(
-        		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		p1PCsp.setBorder(BorderFactory.createEmptyBorder());
-		*/
 		gridConst = new GridBagConstraints();
         gridConst.gridwidth = 2;
         gridConst.gridx = 1;
         gridConst.gridy = 1;
         JScrollPane player1possibleSP = new JScrollPane();
 		player1.add(player1possibleSP,  gridConst);
-    	{
-    		player1possibleSP.setViewportView(player1possible);
-    	}
+    	player1possibleSP.setViewportView(player1possible);
+    	player1possibleSP.setBorder(BorderFactory.createEmptyBorder());
 		//player1.add(player1possibleSP, gridConst);
 		
 		player1.setMaximumSize(maxPaneSize);
 		//player1.setPreferredSize(maxPaneSize);
 		
+		/*
 		gridConst = new GridBagConstraints();
 		gridConst.gridwidth = 3;
 		gridConst.gridx = 0;
 		gridConst.gridy = 0;
 		gameContentPaneBasic.add(player1, gridConst);
-		
+		*/
+		gridConst = new GridBagConstraints();
+		gridConst.gridy = 0;
+		players.add(player1, gridConst);
 		// first player panel ============================================ended
 		
 		// second player panel ================================================
@@ -241,11 +217,15 @@ public class GameUI {
 			player2.add(player2possible, gridConst);
 			player2.setMaximumSize(maxPaneSize);
 			
+			/*
 			gridConst = new GridBagConstraints();
 			gridConst.gridwidth = 3;
 			gridConst.gridx = 0;
 			gridConst.gridy = 1;
-			gameContentPaneBasic.add(player2, gridConst);
+			gameContentPaneBasic.add(player2, gridConst);*/
+			gridConst = new GridBagConstraints();
+			gridConst.gridy = 1;
+			players.add(player2, gridConst);
 		}
 		// second player panel ===========================================ended
     	
@@ -293,11 +273,15 @@ public class GameUI {
 			player3.add(player3possible, gridConst);
 			player3.setMaximumSize(maxPaneSize);
 			
+			/*
 			gridConst = new GridBagConstraints();
 			gridConst.gridwidth = 3;
 			gridConst.gridx = 0;
 			gridConst.gridy = 2;
-			gameContentPaneBasic.add(player3, gridConst);
+			gameContentPaneBasic.add(player3, gridConst);*/
+			gridConst = new GridBagConstraints();
+			gridConst.gridy = 2;
+			players.add(player3, gridConst);
 		}
 		// third player panel ===========================================ended
 		
@@ -345,11 +329,15 @@ public class GameUI {
 			player4.add(player4possible, gridConst);
 			player4.setMaximumSize(maxPaneSize);
 			
+			/*
 			gridConst = new GridBagConstraints();
 			gridConst.gridwidth = 3;
 			gridConst.gridx = 0;
 			gridConst.gridy = 3;
-			gameContentPaneBasic.add(player4, gridConst);
+			gameContentPaneBasic.add(player4, gridConst);*/
+			gridConst = new GridBagConstraints();
+			gridConst.gridy = 3;
+			players.add(player4, gridConst);
 		}
 		// fourth player panel ===========================================ended
 		
@@ -397,11 +385,15 @@ public class GameUI {
 			player5.add(player5possible, gridConst);
 			player5.setMaximumSize(maxPaneSize);
 			
+			/*
 			gridConst = new GridBagConstraints();
 			gridConst.gridwidth = 3;
 			gridConst.gridx = 0;
 			gridConst.gridy = 4;
-			gameContentPaneBasic.add(player5, gridConst);
+			gameContentPaneBasic.add(player5, gridConst);*/
+			gridConst = new GridBagConstraints();
+			gridConst.gridy = 4;
+			players.add(player5, gridConst);
 		}
 		// fifth player panel ===========================================ended
 		
@@ -448,6 +440,16 @@ public class GameUI {
 		gameContentPaneBasic.add(playerI, gridConst);
     	// myself panel ==================================================ended
 		
+		// player panel =======================================================
+		gridConst = new GridBagConstraints();
+		gridConst.gridwidth = 3;
+		gridConst.gridheight = numPlayers - 2;
+		gridConst.gridx = 0;
+		gridConst.gridy = 0;
+		gameContentPaneBasic.add(players, gridConst);
+		//TODO: add JScrollPane to players panel
+		// player panel ==================================================ended
+		
 		// logg panel =========================================================
 		// preparation of text area for log output
         logOutput.setEditable(false);
@@ -459,7 +461,7 @@ public class GameUI {
         logOutput.setPreferredSize(logSize);
         
         
-        
+        //TODO: repair JScrollPane of loggPane (or logOutput)
         JScrollPane loggPaneScroll = new JScrollPane(logOutput);
         loggPaneScroll.setPreferredSize(logSize);
         loggPane.add(loggPaneScroll);
@@ -567,9 +569,7 @@ public class GameUI {
         });
         
         // preparation of main frame
-        //JScrollPane scrollGame = new JScrollPane();
-        //scrollGame.add(gameContentPaneBasic);
-        //game.add(g);
+        // TODO: add JScrollPane to the whole game (or gameContentPaneBasic panel)
         game.add(gameContentPaneBasic);
         game.setTitle("Cluedo - game");
         game.pack();
