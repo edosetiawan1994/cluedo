@@ -104,7 +104,10 @@ public class SearchSpace extends Observable implements Observer {
 		set.remove(card);
 		if (set.size() == 1) {
 			 Iterator<Card> it = set.iterator();
-			 return it.next();
+			 Card solCard = it.next();
+			 this.setChanged();
+			 this.notifyObservers(solCard);
+			 return solCard;
 		}
 		return null;
 	}
@@ -149,6 +152,10 @@ public class SearchSpace extends Observable implements Observer {
 		solPerson = sol.getPerson();
 		solWeapon = sol.getWeapon();
 		solRoom = sol.getRoom();
+		if (displayUI) {
+			UIController.getSingleton().updateSolutionPanel(
+				new Suggestion(solPerson, solWeapon, solRoom));
+		}
 	}
 
 	/**

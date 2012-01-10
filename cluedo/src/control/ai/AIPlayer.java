@@ -139,6 +139,7 @@ public class AIPlayer extends Player {
 		if (doHandCardsTracking) {
 			for (PlayerAssumption assumption : assumptions) {
 				assumption.addObserver(searchSpace);
+				searchSpace.addObserver(assumption);
 				o.addObserver(assumption);
 				for (PlayerAssumption otherAssumption : assumptions) {
 					if (otherAssumption != assumption) {
