@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.junit.Rule;
+
 import control.Card;
 import control.Game;
 import control.Player;
@@ -81,20 +83,22 @@ public class GameUI {
 		List<Player> playersList = nonUIGame.getPlayers();
 		int numPlayers = playersList.size();
 		int i;
-		Image unknownImage = ImageIO.read(new File("cluedoCards/21.jpg"));
+		Image unknownImage = ImageIO.read(new File("cluedoCards/42.jpg"));
 		GridBagConstraints gridConst;
 		
 		Rectangle window = GraphicsEnvironment.getLocalGraphicsEnvironment().
         		getMaximumWindowBounds();
 		int height = window.height/6 - 10;
 		int width = window.width/4 - 20;
-		Dimension maxPaneSize = new Dimension(3*width, height + 10);
+		Dimension maxPaneSize = new Dimension(3 * width, height + 10);
 	    Dimension maxHandCardSize = new Dimension(
 	    		width, height);
 	    Dimension maxPossibleCardSize = new Dimension(
-	    		2*width, height);
+	    		2 * width, height);
 	    Dimension maxCNFdim = new Dimension(maxPaneSize.width, 15);
-	    Dimension logSize = new Dimension(width,height * 5);
+	    Dimension logSize = new Dimension(width - 50, 
+	    		3 * window.height / 4 - 50);
+	    					//new Dimension(width - 50, height * 3 - 50);
 		
 		// first player panel =================================================
     	String playerName = playersList.get(1).getName();
@@ -121,6 +125,19 @@ public class GameUI {
         player1cards.setPreferredSize(maxHandCardSize);
         player1cards.setMaximumSize(maxHandCardSize);
         /*
+        JScrollPane player1cardsSP = new JScrollPane(player1cards);
+        player1cardsSP.setSize(maxHandCardSize);
+        player1cardsSP.setPreferredSize(maxHandCardSize);
+        player1cardsSP.setMaximumSize(maxHandCardSize);
+        //player1cardsSP.add();
+        player1cardsSP.setHorizontalScrollBarPolicy(
+        		JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        player1cardsSP.setVerticalScrollBarPolicy(
+        		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        player1cardsSP.setBorder(BorderFactory.createEmptyBorder());
+		//playerI.add(player1cardsSP);
+        */
+        /*
         JScrollPane p1HCsp = new JScrollPane(player1cards);
         p1HCsp.setPreferredSize(maxHandCardSize);
         p1HCsp.setMaximumSize(maxHandCardSize);
@@ -134,7 +151,14 @@ public class GameUI {
         gridConst.gridwidth = 1;
         gridConst.gridx = 0;
         gridConst.gridy = 1;
-		player1.add(player1cards, gridConst);
+        
+        JScrollPane player1cardsSP = new JScrollPane();
+		player1.add(player1cardsSP,  gridConst);
+    	{
+    		player1cardsSP.setViewportView(player1cards);
+    	}
+        
+		player1.add(player1cardsSP, gridConst);
         
 		player1possible.setBorder(BorderFactory.createCompoundBorder(
     			BorderFactory.createTitledBorder(playerName + 
@@ -142,6 +166,9 @@ public class GameUI {
     			BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		player1possible.setPreferredSize(maxPossibleCardSize);
 		player1possible.setMaximumSize(maxPossibleCardSize);
+		
+		
+		
 		/*
 		JScrollPane p1PCsp = new JScrollPane(player1possible);
 		p1PCsp.setHorizontalScrollBarPolicy(
@@ -152,7 +179,12 @@ public class GameUI {
         gridConst.gridwidth = 2;
         gridConst.gridx = 1;
         gridConst.gridy = 1;
-		player1.add(player1possible, gridConst);
+        JScrollPane player1possibleSP = new JScrollPane();
+		player1.add(player1possibleSP,  gridConst);
+    	{
+    		player1possibleSP.setViewportView(player1possible);
+    	}
+		//player1.add(player1possibleSP, gridConst);
 		
 		player1.setMaximumSize(maxPaneSize);
 		//player1.setPreferredSize(maxPaneSize);
@@ -387,11 +419,11 @@ public class GameUI {
         playerIcards.setMaximumSize(maxPossibleCardSize);
         playerIcards.setPreferredSize(maxPossibleCardSize);
         
-        /*JScrollPane pIsp = new JScrollPane(playerIcards);
-        pIsp.setHorizontalScrollBarPolicy(
+        JScrollPane playerIcardsSP = new JScrollPane(playerIcards);
+        playerIcardsSP.setHorizontalScrollBarPolicy(
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        pIsp.setBorder(BorderFactory.createEmptyBorder());*/
-		playerI.add(playerIcards);
+        playerIcardsSP.setBorder(BorderFactory.createEmptyBorder());
+		playerI.add(playerIcardsSP);
 		
 		personLabel = new JLabel(new ImageIcon(unknownImage));
         weaponLabel = new JLabel(new ImageIcon(unknownImage));
@@ -422,10 +454,27 @@ public class GameUI {
         logOutput.setLineWrap(true);
         logOutput.setWrapStyleWord(true);
         logOutput.setSize(logSize);
+        logOutput.setMaximumSize(logSize);
+        logOutput.setMinimumSize(logSize);
+        logOutput.setPreferredSize(logSize);
         
+        
+        
+        JScrollPane loggPaneScroll = new JScrollPane(logOutput);
+        loggPaneScroll.setPreferredSize(logSize);
+        loggPane.add(loggPaneScroll);
+        
+        
+        logSize.width += 50;
+        logSize.height += 50;
         loggPane.setPreferredSize(logSize);
         loggPane.setMaximumSize(logSize);
-        loggPane.add(logOutput);
+        //loggPane.add(logOutput);
+        
+        //loggPaneScroll.setVerticalScrollBarPolicy(
+        	//	JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        //loggPaneScroll.setViewportView(logOutput);
+        //loggPaneScroll.setColumnHeaderView(logOutput);
         
         gridConst = new GridBagConstraints();
 		gridConst.gridwidth = 1;
@@ -445,7 +494,6 @@ public class GameUI {
 		gridConst.gridy = numPlayers - 1;
 		gameContentPaneBasic.add(buttonPane, gridConst);
 		// buttons panel =================================================ended
-		
 		
 		/*
 		// addition of components to subpanels 1-5

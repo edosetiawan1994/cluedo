@@ -28,7 +28,11 @@ public class GUIController extends UIController {
 	 */
 	@Override
 	public void newLogMessage(String str) {
-		GameUI.logOutput.append(str+"\n");
+		String oldLog = GameUI.logOutput.getText();
+		str += "\n " + oldLog;
+		GameUI.logOutput.removeAll();
+		GameUI.logOutput.setText(str);
+		GameUI.logOutput.repaint();
 	}
 
 	/* (non-Javadoc)
@@ -53,7 +57,7 @@ public class GUIController extends UIController {
 				if (diff > 0) {
 					for (int i = 0; i < diff; i++) {
 						GameUI.player1cards.add(new JLabel(new ImageIcon(
-								ImageIO.read(new File("cluedoCards/21.jpg")))));
+								ImageIO.read(new File("cluedoCards/42.jpg")))));
 					}
 					GameUI.player1cards.validate();
 					GameUI.player1cards.repaint();
@@ -76,7 +80,7 @@ public class GUIController extends UIController {
 				if (diff > 0) {
 					for (int i = 0; i < diff; i++) {
 						GameUI.player2cards.add(new JLabel(new ImageIcon(
-								ImageIO.read(new File("cluedoCards/21.jpg")))));
+								ImageIO.read(new File("cluedoCards/42.jpg")))));
 					}
 					GameUI.player2cards.validate();
 					GameUI.player2cards.repaint();
@@ -99,7 +103,7 @@ public class GUIController extends UIController {
 				if (diff > 0) {
 					for (int i = 0; i < diff; i++) {
 						GameUI.player3cards.add(new JLabel(new ImageIcon(
-								ImageIO.read(new File("cluedoCards/21.jpg")))));
+								ImageIO.read(new File("cluedoCards/42.jpg")))));
 					}
 					GameUI.player3cards.validate();
 					GameUI.player3cards.repaint();
@@ -122,7 +126,7 @@ public class GUIController extends UIController {
 				if (diff > 0) {
 					for (int i = 0; i < diff; i++) {
 						GameUI.player4cards.add(new JLabel(new ImageIcon(
-								ImageIO.read(new File("cluedoCards/21.jpg")))));
+								ImageIO.read(new File("cluedoCards/42.jpg")))));
 					}
 					GameUI.player4cards.validate();
 					GameUI.player4cards.repaint();
@@ -145,7 +149,7 @@ public class GUIController extends UIController {
 				if (diff > 0) {
 					for (int i = 0; i < diff; i++) {
 						GameUI.player5cards.add(new JLabel(new ImageIcon(
-								ImageIO.read(new File("cluedoCards/21.jpg")))));
+								ImageIO.read(new File("cluedoCards/42.jpg")))));
 					}
 					GameUI.player5cards.validate();
 					GameUI.player5cards.repaint();
@@ -272,21 +276,21 @@ public class GUIController extends UIController {
 						new File("cluedoCards/" + person.getId() + ".jpg"))));
 			} else {
 				GameUI.personLabel = new JLabel(new ImageIcon(
-						ImageIO.read(new File("cluedoCards/21.jpg"))));
+						ImageIO.read(new File("cluedoCards/42.jpg"))));
 			}
 			if (weapon != null) {
 				GameUI.weaponLabel = new JLabel(new ImageIcon(ImageIO.read(
 						new File("cluedoCards/" + weapon.getId() + ".jpg"))));
 			} else {
 				GameUI.weaponLabel = new JLabel(new ImageIcon(
-						ImageIO.read(new File("cluedoCards/21.jpg"))));
+						ImageIO.read(new File("cluedoCards/42.jpg"))));
 			}
 			if (room != null) {
 				GameUI.roomLabel = new JLabel(new ImageIcon(ImageIO.read(
 						new File("cluedoCards/" + room.getId() + ".jpg"))));
 			} else {
 				GameUI.roomLabel = new JLabel(new ImageIcon(
-						ImageIO.read(new File("cluedoCards/21.jpg"))));
+						ImageIO.read(new File("cluedoCards/42.jpg"))));
 			}
 			GameUI.personLabel.validate();
 			GameUI.personLabel.repaint();
@@ -390,12 +394,17 @@ public class GUIController extends UIController {
 	@Override
 	public void playerSolves(Player player,
 			int round, Suggestion sol, boolean correct) {
-		if (correct) {
-			GameUI.logOutput.append("========================================\n");
-			GameUI.logOutput.append(player.getName() + " SOLVED THE PUZZLE IN ROUND " + round + ".\n");
-			GameUI.logOutput.append("The murderer " + sol.getPerson() + " who used " + sol.getWeapon() + " in " + sol.getRoom() + ".\n");
-			GameUI.logOutput.append("========================================\n");
+		if (correct) { 
+			String oldLog = GameUI.logOutput.getText();
+			String str = "==============================\n" +  
+					player.getName() + " SOLVED THE PUZZLE IN ROUND " + round +
+					".\n The murderer " + sol.getPerson() + " who used " + 
+					sol.getWeapon() + " in " + sol.getRoom() + ".\n" +
+					"==============================\n" + oldLog;
+			GameUI.logOutput.removeAll();
+			GameUI.logOutput.setText(str);
+			GameUI.logOutput.repaint();
+			GameUI.nextMove.setEnabled(false);
 		}
-		GameUI.nextMove.setEnabled(false);	
 	}
 }
