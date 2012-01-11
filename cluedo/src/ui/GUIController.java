@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import control.Card;
-import control.Game;
 import control.Player;
 import control.Suggestion;
 

@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,9 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import org.junit.Rule;
-
 import control.Card;
 import control.Game;
 import control.Player;
@@ -73,11 +69,11 @@ public class GameUI {
     
     static JPanel buttonPane = new JPanel();
     static JPanel loggPane = new JPanel();
-    
+	static JScrollPane loggPaneScroll = new JScrollPane();
+	
     static JButton exitProgram = new JButton("exit program");
     static JButton nextMove = new JButton("next move");
     static JTextArea logOutput = new JTextArea();
-	static JScrollPane logOutputScroll = new JScrollPane();
 	
     static JLabel personLabel;
     static JLabel weaponLabel;
@@ -95,14 +91,10 @@ public class GameUI {
 		int height = window.height/6 - 10;
 		int width = window.width/4 - 20;
 		Dimension maxPaneSize = new Dimension(3 * width+10, height + 30);
-	    Dimension maxHandCardSize = new Dimension(
-	    		width, height);
-	    Dimension maxPossibleCardSize = new Dimension(
-	    		2 * width, height);
+	    Dimension maxHandCardSize = new Dimension(width+30, height/5*4);
+	    Dimension maxPossibleCardSize = new Dimension(2 * width-30, height/5*4);
 	    Dimension maxCNFdim = new Dimension(maxPaneSize.width, 15);
-	    Dimension logSize = new Dimension(width - 50, 
-	    		3 * window.height / 4 - 50);
-	    					//new Dimension(width - 50, height * 3 - 50);
+	    Dimension logSize = new Dimension(width - 50, 3 * window.height / 4 - 50);
 		
 		// first player panel =================================================
     	String playerName = playersList.get(1).getName();
@@ -133,13 +125,8 @@ public class GameUI {
         gridConst.gridwidth = 1;
         gridConst.gridx = 0;
         gridConst.gridy = 1;
-        
-        JScrollPane player1cardsSP = new JScrollPane();
-		player1.add(player1cardsSP,  gridConst);
-    	player1cardsSP.setViewportView(player1cards);
-    	player1cardsSP.setBorder(BorderFactory.createEmptyBorder());
-        
-		player1.add(player1cardsSP, gridConst);
+		
+		player1.add(player1cards, gridConst);
         
 		player1possible.setBorder(BorderFactory.createCompoundBorder(
     			BorderFactory.createTitledBorder(playerName + 
@@ -147,27 +134,19 @@ public class GameUI {
     			BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		player1possible.setPreferredSize(maxPossibleCardSize);
 		player1possible.setMaximumSize(maxPossibleCardSize);
-		
 		gridConst = new GridBagConstraints();
         gridConst.gridwidth = 2;
         gridConst.gridx = 1;
         gridConst.gridy = 1;
-        JScrollPane player1possibleSP = new JScrollPane();
-		player1.add(player1possibleSP,  gridConst);
-    	player1possibleSP.setViewportView(player1possible);
-    	player1possibleSP.setBorder(BorderFactory.createEmptyBorder());
-		//player1.add(player1possibleSP, gridConst);
-		
+		player1.add(player1possible, gridConst);
 		player1.setMaximumSize(maxPaneSize);
-		//player1.setPreferredSize(maxPaneSize);
 		
 		/*
 		gridConst = new GridBagConstraints();
 		gridConst.gridwidth = 3;
 		gridConst.gridx = 0;
-		gridConst.gridy = 0;
-		gameContentPaneBasic.add(player1, gridConst);
-		*/
+		gridConst.gridy = 1;
+		gameContentPaneBasic.add(player2, gridConst);*/
 		gridConst = new GridBagConstraints();
 		gridConst.gridy = 0;
 		players.add(player1, gridConst);
@@ -341,7 +320,7 @@ public class GameUI {
 		}
 		// fourth player panel ===========================================ended
 		
-		// fifth player panel =================================================
+		// fifth player panel ================================================
 		if (numPlayers > 5) {
 			playerName = playersList.get(5).getName();
 	    	
@@ -389,13 +368,13 @@ public class GameUI {
 			gridConst = new GridBagConstraints();
 			gridConst.gridwidth = 3;
 			gridConst.gridx = 0;
-			gridConst.gridy = 4;
-			gameContentPaneBasic.add(player5, gridConst);*/
+			gridConst.gridy = 3;
+			gameContentPaneBasic.add(player4, gridConst);*/
 			gridConst = new GridBagConstraints();
 			gridConst.gridy = 4;
 			players.add(player5, gridConst);
 		}
-		// fifth player panel ===========================================ended
+		// fourth player panel ===========================================ended
 		
 		// myself panel =======================================================
 		Player myself = playersList.get(0);
@@ -462,21 +441,15 @@ public class GameUI {
         
         
         //TODO: repair JScrollPane of loggPane (or logOutput)
-        JScrollPane loggPaneScroll = new JScrollPane(logOutput);
-        loggPaneScroll.setPreferredSize(logSize);
-        loggPane.add(loggPaneScroll);
-        
-        
+		loggPaneScroll.add(loggPane);
+		loggPane.add(logOutput);
+        loggPaneScroll.setPreferredSize(logSize);             
         logSize.width += 50;
         logSize.height += 50;
-        loggPane.setPreferredSize(logSize);
-        loggPane.setMaximumSize(logSize);
-        //loggPane.add(logOutput);
-        
-        //loggPaneScroll.setVerticalScrollBarPolicy(
-        	//	JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        //loggPaneScroll.setViewportView(logOutput);
-        //loggPaneScroll.setColumnHeaderView(logOutput);
+        loggPaneScroll.setPreferredSize(logSize);
+        loggPaneScroll.setMaximumSize(logSize);
+        loggPaneScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        loggPaneScroll.setViewportView(loggPane);
         
         gridConst = new GridBagConstraints();
 		gridConst.gridwidth = 1;
@@ -554,7 +527,7 @@ public class GameUI {
     		logOutputScroll.setViewportView(logOutput);
             logOutputScroll.setPreferredSize(new java.awt.Dimension(300,700));
     	}        
-*/
+		*/
         // definition of buttons
         exitProgram.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
