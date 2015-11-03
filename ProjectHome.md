@@ -1,0 +1,1 @@
+This is our final project of the Artificial Intelligence course at the National Taiwan University in winter term 2011/2012. We developed an agent who plays the famous board game Cluedo. We focus on the logical reasoning part here.
